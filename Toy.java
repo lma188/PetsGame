@@ -85,12 +85,6 @@ public class Toy {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		Toy plushie = new Toy("Cat Plushie", 200);
-		System.out.println(plushie.getToyName());
-		System.out.println(plushie.getToyQuality());
-		plushie.setIsBroken(true);
-		System.out.println(plushie.getIsBroken());
-		System.out.println(plushie.getToyQuality());
 	}
 
 }
