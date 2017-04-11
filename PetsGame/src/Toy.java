@@ -8,24 +8,24 @@
 public class Toy {
 	/**
 	 * @param toyName The name of the toy. toyName not able to be accessed outside of the class, has a getter method but has no setter method.
-	 * @param price The price of the toy that will be used when purchasing a toy. price unable to be accessed outside of the class, so has a getter method but no setter method so price can't be changed.
+	 * @param toyPrice The price of the toy that will be used when purchasing a toy. toyPrice unable to be accessed outside of the class, so has a getter method but no setter method so price can't be changed.
 	 * @param toyQuality The quality of the toy at a particular point in the game as a rating from 0-100, with 0 being a broken toy, and 100 being a new toy
 	 * @param broken A boolean representing whether or not a toy is broken. False is the toy is not broken, true means the toy is broken
 	 */
 	private final String toyName;
-	private final int price;
+	private final int toyPrice;
 	private int toyQuality;
 	private boolean isBroken;
 
 	/**
 	 * 
 	 * @param name The name specified when setting up the instance of a toy
-	 * @param toyPrice The price of the toy, specified when setting up the instance of the toy
+	 * @param price The price of the toy, specified when setting up the instance of the toy
 	 */
 	
-	public Toy(String name, int toyPrice){
+	public Toy(String name, int price){
 		toyName = name;
-		price = toyPrice;
+		toyPrice = price;
 		toyQuality = 100;
 		isBroken = false;
 	}
@@ -42,7 +42,7 @@ public class Toy {
 	 * @return Return the price of the toy.
 	 */
 	public int getPrice(){
-		return price;
+		return toyPrice;
 	}
 	
 	/**
