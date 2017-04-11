@@ -41,7 +41,7 @@ public class Toy {
 	 * 
 	 * @return Return the price of the toy.
 	 */
-	public int getPrice(){
+	public int getToyPrice(){
 		return toyPrice;
 	}
 	
