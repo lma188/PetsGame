@@ -12,8 +12,8 @@ public class Toy {
 	 * @param toyQuality The quality of the toy at a particular point in the game as a rating from 0-100, with 0 being a broken toy, and 100 being a new toy
 	 * @param broken A boolean representing whether or not a toy is broken. False is the toy is not broken, true means the toy is broken
 	 */
-	private String toyName;
-	private int price;
+	private final String toyName;
+	private final int price;
 	private int toyQuality;
 	private boolean isBroken;
 
