@@ -1,3 +1,4 @@
+package pets;
 /**
  * The Toy class will be implemented to have 6 instances of toys that the Player can use on a pet
  * 
