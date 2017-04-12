@@ -217,7 +217,6 @@ public class Pet extends Species{
 	public void play(Toy toyToBePlayed){
 		private int playImprovement;
 		private int currentMood = this.getMood();
-		private int decreaseInPlayLevel;
 		private int currentPlayLevel = this.getPlayfulLevel();
 		private int currentToyQuality = toyToBePlayed.getToyQuality();
 		private int damageByPet = this.getPetSpecies().getDamage();
@@ -230,11 +229,10 @@ public class Pet extends Species{
 		}else{
 			this.setMood(currentMood + playImprovement);
 		}
-		decreaseInPlayLevel = 100 - this.getPetSpecies().getPlayCo();
-		if(currentPlayLevel - decreaseInPlayLevel <= 0){
+		if(currentPlayLevel - playImprovement <= 0){
 			this.setPlayfulLevel(0);
 		}else{
-			this.setPlayfulLevel(currentPlayLevel - decreaseInPlayLevel);
+			this.setPlayfulLevel(currentPlayLevel - playImprovement);
 		}
 		toyToBePlayed.setToyQuality(currentToyQuality - damageByPet);
 		if(toyToBePlayed.getIsBroken() == true){
