@@ -14,8 +14,8 @@ public class Store {
 	 */
 	
 	
-	private ArrayList<Food> storeFoods = new ArrayList<Food>();
-	private ArrayList<Toy> storeToys = new ArrayList<Toy>();
+	public ArrayList<Food> storeFoods = new ArrayList<Food>();
+	public ArrayList<Toy> storeToys = new ArrayList<Toy>();
 	storeFoods.add(new Food("Pizza", 40, 90, 70));
 	storeFoods.add(new Food("Chocolate (Dog Friendly)", 30, 95, 30));
 	storeFoods.add(new Food("Burger", 40, 75, 50));
