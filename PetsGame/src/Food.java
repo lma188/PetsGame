@@ -1,9 +1,5 @@
 
 package pets;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-
 /**
  * The Food class stored the variables of six types food.
  * And it also show the details of food as nutrition value, food price and tastiness.
@@ -13,11 +9,11 @@ import java.util.Arrays;
  *
  */
 
-public class food {
+public class Food {
 	
 	/** 
 	 * @param foodName is the name of each food. 
-	 *        It cannot be assessed outside class.
+	 *        It cannot be accessed outside class.
 	 *        It has getter method but no setter method so the name can't be changed.  
 	 * 
 	 * @param nutritionValue is referred to nutritional level of each food with range [0:100]
@@ -41,10 +37,9 @@ public class food {
 	private int nutritionValue;
 	private int tastiness;
 	private int foodPrice;
-	private ArrayList<Food> foodlist = new ArrayList<Food>();
 	
 
-	public food(String name, int nutritionalValue, int taste, int price){
+	public Food(String name, int nutritionalValue, int taste, int price){
 		foodName = name;
 		nutritionValue = nutritionalValue;
 		tastiness = taste;
@@ -57,61 +52,24 @@ public class food {
 		return foodName;
 	}	
 	
-	public int getnutritionalValue(){
+	public int getNutritionalValue(){
 		
 		return nutritionValue;
 		
 	}
-	public int gettastfulLevel(){
+	public int getTastiness(){
 		
 		return tastiness;
 				
 	}
-	public int getprice(){
+	public int getPrice(){
 		
 		return foodPrice;
 		
 	}
 	
 	
-	public static ArrayList<food> getArrayList(){
-		 
-		ArrayList<food> foods = new ArrayList<>();
-		
-		return foods;
-		 
-	}
-
-	
 	public static void main(String[] args) {
-		
-		
-		
-		ArrayList<food> foods = new ArrayList<>();
-		foodname foods1;
-		
-		foods1 = new food("name1", 15 , 50, 10);
-		foods.add(foods1);
-		foods1 = new food("name2", 20 , 55, 25);
-		foods.add(foods1);
-		foods1 = new food("name3", 15 , 50, 10);
-		foods.add(foods1);
-		foods1 = new food("name4", 15 , 50, 10);
-		foods.add(foods1);
-		foods1 = new food("name5", 15 , 50, 10);
-		foods.add(foods1);
-		foods1 = new food("name6", 15 , 50, 10);
-		foods.add(foods1);
-		
-		System.out.println("FoodName\t NutritionValue\t Tastiness\t FoodPrice\t");
-		for (foodname printfoodname : foods){
-			
-			System.out.println(
-					printfoodname.getname() + "\t" + printfoodname.getnutritionalValue() + "\t" +
-					printfoodname.gettastfulLevel() + "\t" + printfoodname.getprice());
-		}
-		
-		
 		
 	}
 	
