@@ -1,3 +1,4 @@
+package pets;
 /**
  * The Species class is the superclass of Pets. It gathers all the relevant information for pets of a particular species.
  * @author ltt19
