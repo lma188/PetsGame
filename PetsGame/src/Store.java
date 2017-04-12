@@ -14,41 +14,36 @@ public class Store {
 	 */
 	
 	
-	private ArrayList<Food> storefood = new ArrayList<>();
-	private ArrayList<Toy> storetoy = new ArrayList<>();
+	private ArrayList<Food> storeFoods = new ArrayList<Food>();
+	private ArrayList<Toy> storeToys = new ArrayList<Toy>();
+	storeFoods.add(new Food("Pizza", 40, 90, 70));
+	storeFoods.add(new Food("Chocolate (Dog Friendly)", 30, 95, 30));
+	storeFoods.add(new Food("Burger", 40, 75, 50));
+	storeFoods.add(new Food("Spaghetti", 50, 50, 20));
+	storeFoods.add(new Food("Burritos", 70, 70, 70));
+	storeFoods.add(new Food("Kale", 100, 20, 50));
 	
-	
-	
-	public Store(String Foods, String Toy){
-		storeFoods = Foods;
-		storeToy = Toy;
-		
-	}
+	storeToys.add(new Toy("Ball", 40));
+	storeToys.add(new Toy("Twine", 20));
+	storeToys.add(new Toy("Teddy Bear", 60));
+	storeToys.add(new Toy("Chew Toy", 75));
+	storeToys.add(new Toy("Bell", 40));
+	storeToys.add(new Toy("Play House", 100));
 	
 	/**
 	 * return to the list of Food 
 	 */
-	public ArrayList<Food> storeFood(){
-		
-		ArrayList<Food> food = new ArrayList<Food>();
-		food.add();
-		return food;
-		
+	public ArrayList<Food> getStoreFoods(){
+		return storeFoods;
 	}
 	
 	/**
 	 * return to the list of Toy
 	 */
-	public ArrayList<Toy> storeToy(){
-		
-		ArrayList<Food> toy = new ArrayList<Food>();
-		toy.add();
-		return toy;
-		
+	public ArrayList<Toy> getStoreToys(){
+		return storeToys;
 	}
 	
-    
-
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
