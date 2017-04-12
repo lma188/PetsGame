@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 /**
  * This class provides the information of a player in the game.
  * @author ltt19
