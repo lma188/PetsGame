@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 /**
  * The Store class stored the two lists, Food and Toy.
