@@ -1,3 +1,4 @@
+package pets;
 /**
  * The Pet class contains all the properties of a particular pet, and each pet has properties of a particular species
  * @author ltt19
