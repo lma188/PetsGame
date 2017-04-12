@@ -1,3 +1,5 @@
+package pets;
+
 /**
  * The GameEnvironment class is the main class that runs the game.
  * @author ltt19
