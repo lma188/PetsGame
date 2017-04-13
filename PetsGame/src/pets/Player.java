@@ -24,13 +24,13 @@ public class Player {
 	
 	/**
 	 * @param name The name of the player. Must be unique.
-	 * @param amountPets The nummber of pets the player has chosen to have in the game.
+	 * @param amountPets The number of pets the player has chosen to have in the game.
 	 */
 	public Player(String name, int amountPets){
 		playerName = name;
 		balance = 0;
 		numPets = amountPets;
-		playersPets = new Toy[numPets];
+		playersPets = new Pet[numPets];
 		playersToys = new ArrayList<Toy>();
 		playersFood = new ArrayList<Food>();
 	}

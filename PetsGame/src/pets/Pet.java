@@ -4,13 +4,13 @@ package pets;
  * @author ltt19
  * @version 1.0
  */
-public class Pet extends Species{
+public class Pet{
 	
 	/**
 	 * @param petName The name of the pet. Must be unique to the pet.
 	 * @param hungerLevel The hunger level of the pet as a rating of 0-100, 0 being not hungry, 100 the most hungry.
 	 * @param tiredLevel The tiredness of the pet as a rating of 0-100, 0 being not tired, and 100 being the most tired.
-	 * @param playfulLevel The playfullness of the pet as a rating of 0-100, 0 being not playful, 100 being the most playful.
+	 * @param playfulLevel The playfulness of the pet as a rating of 0-100, 0 being not playful, 100 being the most playful.
 	 * @param toiletLevel The need for the toilet of the pet as a rating of 0-100, 0 being not needing the toilet, and 100 needing the toilet the most.
 	 * @param mood The mood of the pet as a rating of 0-100, 0 being a bad mood, 100 being a good mood.
 	 * @param isAlive Whether or not the pet is alive. true means the pet is alive, false means the pet is dead.
@@ -79,7 +79,7 @@ public class Pet extends Species{
 	}
 	
 	/**
-	 * @return Returns the playfullness of the pet.
+	 * @return Returns the playfulness of the pet.
 	 */
 	public int getPlayfulLevel(){
 		return playfulLevel;
@@ -142,7 +142,7 @@ public class Pet extends Species{
 	}
 	
 	/**
-	 * @param playful The playfullness that the pet will be set to have.
+	 * @param playful The playfulness that the pet will be set to have.
 	 */
 	public void setPlayfulLevel(int playful){
 		playfulLevel = playful;
@@ -216,14 +216,14 @@ public class Pet extends Species{
 	 * @param toyToBePlayed The toy that will be played with.
 	 */
 	public void play(Toy toyToBePlayed){
-		private int playImprovement;
-		private int currentMood = this.getMood();
-		private int currentPlayLevel = this.getPlayfulLevel();
-		private int currentToyQuality = toyToBePlayed.getToyQuality();
-		private int damageByPet = this.getPetSpecies().getDamage();
+		int playImprovement;
+		int currentMood = this.getMood();
+		int currentPlayLevel = this.getPlayfulLevel();
+		int currentToyQuality = toyToBePlayed.getToyQuality();
+		int damageByPet = this.getPetSpecies().getDamage();
 		playImprovement = (this.getPlayfulLevel() * this.getPetSpecies().getPlayCo())/100;
 		if(this.getPetSpecies().getFavToy() == toyToBePlayed){
-			playImprovement = playImprovement * 1.5;
+			playImprovement = (int) (playImprovement * 1.5);
 		}
 		if(currentMood + playImprovement >= 100){
 			this.setMood(100);
