@@ -21,8 +21,8 @@ public class GameEnvironment {
 	public Species[] speciesAvailable;
 	public int numDays;
 	public int numPlayers;
-	public static ArrayList<Food> foodAvailable = new ArrayList<Food>();
-	public static ArrayList<Toy> toysAvailable = new ArrayList<Toy>();
+	public ArrayList<Food> foodAvailable = new ArrayList<Food>();
+	public ArrayList<Toy> toysAvailable = new ArrayList<Toy>();
 	
 	public static Food pizza = new Food("Pizza", 40, 90, 70);
 	public static Food chocolate = new Food("Chocolate (Dog Friendly)", 30, 95, 30);
@@ -30,12 +30,7 @@ public class GameEnvironment {
 	public static Food spaghetti = new Food("Spaghetti", 50, 50, 20);
 	public static Food burritos = new Food("Burritos", 70, 70, 70);
 	public static Food kale = new Food("Kale", 100, 20, 50);
-	foodAvailable.add(pizza);
-	foodAvaiable.add(chocolate);
-	foodAvaiable.add(burger);
-	foodAvaiable.add(spaghetti);
-	foodAvaiable.add(burritos);
-	foodAvaiable.add(kale);
+	
 	
 	public static Toy ball = new Toy("Ball", 40);
 	public static Toy twine = new Toy("Twine", 20);
@@ -43,19 +38,27 @@ public class GameEnvironment {
 	public static Toy chewToy = new Toy("Chew Toy", 75);
 	public static Toy bell = new Toy("Bell", 40);
 	public static Toy playHouse = new Toy("Play House", 100);
-	toysAvailable.add(ball);
-	toysAvailable.add(twine);
-	toysAvailable.add(teddyBear);
-	toysAvailable.add(chewToy);
-	toysAvailable.add(bell);
-	toysAvailable.add(playHouse);
 	
 	
+	public GameEnvironment(){
+		foodAvailable.add(pizza);
+		foodAvailable.add(chocolate);
+		foodAvailable.add(burger);
+		foodAvailable.add(spaghetti);
+		foodAvailable.add(burritos);
+		foodAvailable.add(kale);
+		
+		toysAvailable.add(ball);
+		toysAvailable.add(twine);
+		toysAvailable.add(teddyBear);
+		toysAvailable.add(chewToy);
+		toysAvailable.add(bell);
+		toysAvailable.add(playHouse);
+		
+	}
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		GameEnvironment test = new GameEnvironment();
-		System.out.println(test.foodAvailable);
 	}
 
 }

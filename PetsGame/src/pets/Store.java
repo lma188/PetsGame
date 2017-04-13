@@ -11,13 +11,18 @@ import java.util.ArrayList;
 public class Store {
 	
 	/**
-	 * @param arrayList<Food> storefood is the list of food class.
-	 * @param arrayList<Toy> storetoy is the list of toy class.
+	 * @param arrayList<Food> storeFoods is the list of food class.
+	 * @param arrayList<Toy> storeToys is the list of toy class.
 	 */
 	
 	
-	public ArrayList<Food> storeFoods = GameEnvironment.foodAvailable;
-	public ArrayList<Toy> storeToys = GameEnvironment.toysAvailable;
+	public ArrayList<Food> storeFoods;
+	public ArrayList<Toy> storeToys;
+	
+	public Store(GameEnvironment gameInstance){
+		storeFoods = gameInstance.foodAvailable;
+		storeToys = gameInstance.toysAvailable;
+	}
 	
 	/**
 	 * return to the list of Food 
@@ -35,7 +40,6 @@ public class Store {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
 	}
 
 }
