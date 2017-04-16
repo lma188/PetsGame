@@ -44,7 +44,7 @@ public class Food {
 	 * The getter method for the property FOOD_NAME.
 	 * @return Returns the name of the food.
 	 */
-	public String getname(){
+	public String getFoodName(){
 		
 		return FOOD_NAME;
 	}	
