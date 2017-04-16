@@ -1,6 +1,6 @@
 package pets;
 /**
- * The Species class is the superclass of Pets. It gathers all the relevant information for pets of a particular species.
+ * The Species class gathers all the relevant information for pets of a particular species.
  * @author ltt19
  * @version 1.1
  */
@@ -31,7 +31,7 @@ public class Species {
 	 * @param speciesName The name of the species chosen.
 	 * @param favToy The species' favourite toy.
 	 * @param favFood The species' favourite food.
-	 * @param damage The amount of damage this species does to a toy.
+	 * @param damage The amount of damage this species does to a toy, 0-100.
 	 * @param hungerCo How hungry a pet of this species gets during a day, 0-100.
 	 * @param tiredCo How tired a pet of this species gets during a day, 0-100.
 	 * @param playCo How playful a pet of this species gets during a day, 0-100.
@@ -51,6 +51,7 @@ public class Species {
 	}
 	
 	/**
+	 * The getter method for the property FAV_TOY.
 	 * @return Returns the favourite toy of this species.
 	 */
 	public Toy getFavToy(){
@@ -58,6 +59,7 @@ public class Species {
 	}
 	
 	/**
+	 * The getter method for the property FAV_FOOD.
 	 * @return Returns the favourite food of this species.
 	 */
 	public Food getFavFood(){
@@ -65,6 +67,7 @@ public class Species {
 	}
 	
 	/**
+	 * The getter method for the property DAMAGE.
 	 * @return Returns the damage done to toys of this species.
 	 */
 	public int getDamage(){
@@ -72,6 +75,7 @@ public class Species {
 	}
 	
 	/**
+	 * The getter method for the property SPECIES_NAME.
 	 * @return Returns the name of the species.
 	 */
 	public String getSpeciesName(){
@@ -79,6 +83,7 @@ public class Species {
 	}
 	
 	/**
+	 * The getter method for the property HUNGER_CO.
 	 * @return Returns the hunger coefficient of the species.
 	 */
 	public int getHungerCo(){
@@ -86,6 +91,7 @@ public class Species {
 	}
 	
 	/**
+	 * The getter method for the property TIRED_CO.
 	 * @return Returns the tired coefficient of the species.
 	 */
 	public int getTiredCo(){
@@ -93,6 +99,7 @@ public class Species {
 	}
 	
 	/**
+	 * The getter method for the property PLAY_CO.
 	 * @return Returns the playful coefficient of the species.
 	 */
 	public int getPlayCo(){
@@ -100,6 +107,7 @@ public class Species {
 	}
 	
 	/**
+	 * The getter method for the property TOILET_CO.
 	 * @return Returns the toilet coefficient of the species.
 	 */
 	public int getToiletCo(){
@@ -107,6 +115,7 @@ public class Species {
 	}
 	
 	/**
+	 * The getter method for the property ORIGINAL_WEIGHT.
 	 * @return Returns the original weight of a pet of this species.
 	 */
 	public int getOriginalWeight(){

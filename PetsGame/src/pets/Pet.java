@@ -1,13 +1,12 @@
 package pets;
 /**
- * The Pet class contains all the properties of a particular pet, and each pet has properties of a particular species
+ * The Pet class contains all the properties of a particular pet, and each pet has properties of a particular species.
  * @author ltt19
- * @version 1.0
  */
 public class Pet{
 	
 	/**
-	 * @param petName The name of the pet. Must be unique to the pet.
+	 * @param PET_NAME The name of the pet. Must be unique to the pet.
 	 * @param hungerLevel The hunger level of the pet as a rating of 0-100, 0 being not hungry, 100 the most hungry.
 	 * @param tiredLevel The tiredness of the pet as a rating of 0-100, 0 being not tired, and 100 being the most tired.
 	 * @param playfulLevel The playfulness of the pet as a rating of 0-100, 0 being not playful, 100 being the most playful.
@@ -16,11 +15,11 @@ public class Pet{
 	 * @param isAlive Whether or not the pet is alive. true means the pet is alive, false means the pet is dead.
 	 * @param weight The weight of the pet in kg.
 	 * @param isMisbehaving Whether or not the pet is misbehaving. true means the pet is misbehaving, false means the pet is not misbehaving.
-	 * @param petSpecies The Species of the pet.
+	 * @param PET_SPECIES The Species of the pet.
 	 * @param isSick Whether or not the pet is sick. true means the pet is sick, false means the pet is healthy.
 	 */
 
-	private final String petName;
+	private final String PET_NAME;
 	private int hungerLevel;
 	private int tiredLevel;
 	private int playfulLevel;
@@ -29,162 +28,185 @@ public class Pet{
 	private boolean isAlive;
 	private int weight;
 	private boolean isMisbehaving;
-	private final Species petSpecies;
+	private final Species PET_SPECIES;
 	private boolean isSick;
 	
 	/**
-	 * @param name The name specified when creating an instance of a pet.
+	 * The constructor method of Pet.
+	 * Sets initial levels of hunger, tiredness, playfulness, and need for toilet to their respective coefficients specified for the Species of that pet.
+	 * Mood is set to 50, weight is set to the baseline weight of the Species of the pet.
+	 * @param name The name specified when creating an instance of a pet. Must be unique to the pet.
 	 * @param pet_species The species of the pet as specified when creating an instance of a pet.
 	 */
 	public Pet(String name, Species pet_species){
-		petName = name;
-		petSpecies = pet_species;
-		hungerLevel = 1 * petSpecies.getHungerCo();
-		tiredLevel = 1 * petSpecies.getTiredCo();
-		playfulLevel = 1 * petSpecies.getPlayCo();
-		toiletLevel = 1 * petSpecies.getToiletCo();
+		PET_NAME = name;
+		PET_SPECIES = pet_species;
+		hungerLevel = this.getPetSpecies().getHungerCo();
+		tiredLevel = this.getPetSpecies().getTiredCo();
+		playfulLevel = this.getPetSpecies().getPlayCo();
+		toiletLevel = this.getPetSpecies().getToiletCo();
 		mood = 50;
 		isAlive = true;
-		weight = petSpecies.getOriginalWeight();
+		weight = this.getPetSpecies().getOriginalWeight();
 		isMisbehaving = false;
 		isSick = false;
 	}
 	
 	/**
+	 * The getter method for the property PET_NAME.
 	 * @return Returns the name of the pet.
 	 */
 	public String getPetName(){
-		return petName;
+		return PET_NAME;
 	}
 	
 	/**
+	 * The getter method for the property PET_SPECIES.
 	 * @return Returns the species of the pet.
 	 */
 	public Species getPetSpecies(){
-		return petSpecies;
+		return PET_SPECIES;
 	}
 	
 	/**
-	 * @return Returns the hunger level of the pet.
+	 * The getter method for the property hungerLevel.
+	 * @return Returns the hunger level of the pet, a rating from 0-100.
 	 */
 	public int getHungerLevel(){
 		return hungerLevel;
 	}
 	
 	/**
-	 * @return Returns the tiredness of the pet.
+	 * The getter method for the property tiredLevel.
+	 * @return Returns the tiredness of the pet, a rating from 0-100.
 	 */
 	public int getTiredLevel(){
 		return tiredLevel;
 	}
 	
 	/**
-	 * @return Returns the playfulness of the pet.
+	 * The getter method for the property playfulLevel.
+	 * @return Returns the playfulness of the pet, a rating from 0-100.
 	 */
 	public int getPlayfulLevel(){
 		return playfulLevel;
 	}
 	
 	/**
-	 * @return Returns the need for the toilet of the pet.
+	 * The getter method for the property toiletLevel.
+	 * @return Returns the need for the toilet of the pet, a rating from 0-100.
 	 */
 	public int getToiletLevel(){
 		return toiletLevel;
 	}
 	
 	/**
-	 * @return Returns the mood of the pet.
+	 * The getter method for the property mood.
+	 * @return Returns the mood of the pet, a rating from 0-100.
 	 */
 	public int getMood(){
 		return mood;
 	}
 	
 	/**
-	 * @return Returns whether or not the pet is alive.
+	 * The getter method for the property isAlive.
+	 * @return Returns whether or not the pet is alive, true means pet is alive, false means pet is dead.
 	 */
 	public boolean getIsAlive(){
 		return isAlive;
 	}
 	
 	/**
-	 * @return Returns the weight of the pet.
+	 * The getter method for the property weight.
+	 * @return Returns the weight of the pet in kg.
 	 */
 	public int getWeight(){
 		return weight;
 	}
 	
 	/**
-	 * @return Returns whether or not the pet is misbehaving.
+	 * The getter method for the property isMisbehaving.
+	 * @return Returns whether or not the pet is misbehaving, true means they are misbehaving, false means they are not misbehaving.
 	 */
 	public boolean getIsMisbehaving(){
 		return isMisbehaving;
 	}
 	
 	/**
-	 * @return Returns whether or not the pet is sick.
+	 * The getter method for the property isSick.
+	 * @return Returns whether or not the pet is sick, true means the pet is sick, false means the pet is not sick.
 	 */
 	public boolean getIsSick(){
 		return isSick;
 	}
 	
 	/**
-	 * @param hunger The hunger level that the pet will be set to have.
+	 * The setter method for the property hungerLevel.
+	 * @param hunger The hunger level that the pet will be set to have, a rating from 0-100.
 	 */
 	public void setHungerLevel(int hunger){
 		hungerLevel = hunger;
 	}
 	
 	/**
-	 * @param tired The tiredness that the pet will be set to have.
+	 * The setter method for the property tiredLevel.
+	 * @param tired The tiredness that the pet will be set to have, a rating from 0-100.
 	 */
 	public void setTiredLevel(int tired){
 		tiredLevel = tired;
 	}
 	
 	/**
-	 * @param playful The playfulness that the pet will be set to have.
+	 * The setter method for the property playfulLevel.
+	 * @param playful The playfulness that the pet will be set to have, a rating from 0-100.
 	 */
 	public void setPlayfulLevel(int playful){
 		playfulLevel = playful;
 	}
 	
 	/**
-	 * @param toilet The need for the toilet that the pet will be set to have.
+	 * The setter method for the property toiletLevel.
+	 * @param toilet The need for the toilet that the pet will be set to have, a rating from 0-100.
 	 */
 	public void setToiletLevel(int toilet){
 		toiletLevel = toilet;
 	}
 	
 	/**
-	 * @param petMood The mood that the pet will be set to have. 
+	 * The setter method for the property mood.
+	 * @param petMood The mood that the pet will be set to have, a rating from 0-100. 
 	 */
 	public void setMood(int petMood){
 		mood = petMood;
 	}
 	
 	/**
-	 * @param alive Whether or not the pet is alive will be updated to this.
+	 * The setter method for the property isAlive.
+	 * @param alive Whether or not the pet is alive will be updated to this, true means pet is alive, false means pet is dead.
 	 */
 	public void setIsAlive(boolean alive){
 		isAlive = alive;
 	}
 	
 	/**
-	 * @param petWeight The weight that the pet will be set to have.
+	 * The setter method for the property weight.
+	 * @param petWeight The weight that the pet will be set to have in kg.
 	 */
 	public void setWeight(int petWeight){
 		weight = petWeight;
 	}
 	
 	/**
-	 * @param mis Whether or not the pet is misbehaving will be updated to this.
+	 * The setter method for the property isMisbehaving.
+	 * @param mis Whether or not the pet is misbehaving will be updated to this, true means they are misbehaving, false means they are not misbehaving.
 	 */
 	public void setIsMisbehaving(boolean mis){
 		isMisbehaving = mis;
 	}
 	
 	/**
-	 * @param Whether or not the pet is sick will be updated to this.
+	 * The setter method for the property isSick.
+	 * @param Whether or not the pet is sick will be updated to this, true means the pet is sick, false means the pet is not sick.
 	 */
 	public void setIsSick(boolean sick){
 		isSick = sick;
@@ -210,9 +232,9 @@ public class Pet{
 	/**
 	 * The play() method will make the pet play with the specified toy.
 	 * Playing with the toy will make the pets happier, even more so if it is their favourite toy.
-	 * The pet will feel less playful after playing. If they like playing then their level of playfullness will not decrease as much as if they don't like playing.
+	 * The pet will feel less playful after playing. Playfulness will decrease by the amount their happiness increases.
 	 * Playing with the toy will damage it, and the toy may break.
-	 * Rigourous exercise will make the pet tired and hungry depending on the toy.
+	 * Rigorous exercise will make the pet tired and hungry depending on the toy.
 	 * @param toyToBePlayed The toy that will be played with.
 	 */
 	public void play(Toy toyToBePlayed){
@@ -241,7 +263,16 @@ public class Pet{
 			 * alert the player if the toy is broken
 			 */
 		}
-		
+		if(this.getHungerLevel() + toyToBePlayed.getExerciseRequired() >= 100){
+			this.setHungerLevel(100);
+		}else{
+			this.setHungerLevel(this.getHungerLevel() + toyToBePlayed.getExerciseRequired());
+		}
+		if(this.getTiredLevel() + toyToBePlayed.getExerciseRequired() >= 100){
+			this.setTiredLevel(100);
+		}else{
+			this.setTiredLevel(this.getTiredLevel() + toyToBePlayed.getExerciseRequired());
+		}
 	}
 	
 	
