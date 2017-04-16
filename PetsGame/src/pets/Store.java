@@ -1,9 +1,7 @@
 package pets;
-import java.util.ArrayList;
 
 /**
- * The Store class stored the two lists, Food and Toy.
- * The Store is only showed the lists of Food and Toy there is no other action.
+ * The Store class stores the lists of foods and toys available for use in the store.
  *
  * @author lma188
  */
@@ -11,30 +9,26 @@ import java.util.ArrayList;
 public class Store {
 	
 	/**
-	 * @param arrayList<Food> storeFoods is the list of food class.
-	 * @param arrayList<Toy> storeToys is the list of toy class.
+	 * @param storeFoods The list of foods available for use in the store.
+	 * @param storeToys The list of toys available for use in the store.
 	 */
 	
-	
-	public ArrayList<Food> storeFoods;
-	public ArrayList<Toy> storeToys;
-	
-	public Store(GameEnvironment gameInstance){
-		storeFoods = gameInstance.foodAvailable;
-		storeToys = gameInstance.toysAvailable;
-	}
+	public Food[] storeFoods = GameEnvironment.getFoodAvailable();
+	public Toy[] storeToys = GameEnvironment.getToysAvailable();
 	
 	/**
-	 * return to the list of Food 
+	 * The getter method for the property storeFoods.
+	 * @return Returns the list of foods available for use in the store.
 	 */
-	public ArrayList<Food> getStoreFoods(){
+	public Food[] getStoreFoods(){
 		return storeFoods;
 	}
 	
 	/**
-	 * return to the list of Toy
+	 * The getter method for the property storeToys.
+	 * @return Returns the list of toys available for use in the store.
 	 */
-	public ArrayList<Toy> getStoreToys(){
+	public Toy[] getStoreToys(){
 		return storeToys;
 	}
 	

@@ -1,8 +1,8 @@
 
 package pets;
 /**
- * The Food class stored the variables of six types food.
- * And it also show the details of food as nutrition value, food price and tastiness.
+ * The Food class will be implemented to have 6 instances of toys that the Player can feed to a pet.
+ * The Food class stores the properties of the food, such as nutritional value, tastiness, and price.
  * 
  * 
  * @author lma188
@@ -12,59 +12,70 @@ package pets;
 public class Food {
 	
 	/** 
-	 * @param foodName is the name of each food. 
-	 *        It cannot be accessed outside class.
-	 *        It has getter method but no setter method so the name can't be changed.  
+	 * @param FOOD_NAME The name of each food.  
 	 * 
-	 * @param nutritionValue is referred to nutritional level of each food with range [0:100]
-	 *        It can reduce the hungry level of pets after ate food. 
-	 *        The reduce portion is refer to the value of nutrition(we will talk these details in Species class).  
-	 *        nutritionValue cannot be assessed outside class.
-	 *        It has getter method but no setter method and the value cannot be changed.
+	 * @param NUTRITIONAL_VALUE The nutritional value of each food as a rating of 0-100.
 	 *        
-	 * @param tastiness is referred to how tasty of each food.   
-	 *        The range is [0:100].
-	 *        Note: Each food has its based_tastiness which is fixed. 
+	 * @param TASTINESS The tastiness of the food as a rating from 0-100.
 	 *        
-	 * @param foodPrice is the price for player to buy food and is fixed. 
-	 *        The range is [0:100].
-	 *        Note: larger number means more expansive.   
+	 * @param FOOD_PRICE The price for player to buy this food from the store. Price is between 1-100.   
 	 *
 	 */
+	private final String FOOD_NAME;
+	private final int NUTRITIONAL_VALUE;
+	private final int TASTINESS;
+	private final int FOOD_PRICE;
 	
-	
-	private String foodName;
-	private int nutritionValue;
-	private int tastiness;
-	private int foodPrice;
-	
-
-	public Food(String name, int nutritionalValue, int taste, int price){
-		foodName = name;
-		nutritionValue = nutritionalValue;
-		tastiness = taste;
-		foodPrice = price;
+	/**
+	 * The constructor method to initialise the values of the food's properties.
+	 * @param name The name of the food.
+	 * @param nutritionValue The nutritional value of the food from 0-100.
+	 * @param taste The tastiness of the food as a rating of 0-100
+	 * @param price The price of the food in the store, between 1-100.
+	 */
+	public Food(String name, int nutritionValue, int taste, int price){
+		FOOD_NAME = name;
+		NUTRITIONAL_VALUE = nutritionValue;
+		TASTINESS = taste;
+		FOOD_PRICE = price;
 	}
 	
-	
+	/**
+	 * The getter method for the property FOOD_NAME.
+	 * @return Returns the name of the food.
+	 */
 	public String getname(){
 		
-		return foodName;
+		return FOOD_NAME;
 	}	
 	
+	/**
+	 * The getter method for the property NUTRITIONAL_VALUE.
+	 * @return Returns the nutritional value of the food as a rating of 0-100.
+	 */
 	public int getNutritionalValue(){
 		
-		return nutritionValue;
+		return NUTRITIONAL_VALUE;
 		
 	}
+	
+	/**
+	 * The getter method for the property TASTINESS.
+	 * @return Returns the tastiness of the food as a rating of 0-100.
+	 */
 	public int getTastiness(){
 		
-		return tastiness;
+		return TASTINESS;
 				
 	}
-	public int getPrice(){
+	
+	/**
+	 * The getter method for the property FOOD_PRICE.
+	 * @return Returns the price of the food. The price is between 1-100.
+	 */
+	public int getFoodPrice(){
 		
-		return foodPrice;
+		return FOOD_PRICE;
 		
 	}
 	
