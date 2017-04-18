@@ -7,7 +7,7 @@ public class Pet{
 	
 	/**
 	 * @param PET_NAME The name of the pet. Must be unique to the pet.
-	 * @param hungerLevel The hunger level of the pet as a rating of 0-100, 0 being not hungry, 100 the most hungry.
+	 * @param hungerLevel The hunger level of the pet as a rating of 0-100, 0 being not hungry, 100 the most hungry. 
 	 * @param tiredLevel The tiredness of the pet as a rating of 0-100, 0 being not tired, and 100 being the most tired.
 	 * @param playfulLevel The playfulness of the pet as a rating of 0-100, 0 being not playful, 100 being the most playful.
 	 * @param toiletLevel The need for the toilet of the pet as a rating of 0-100, 0 being not needing the toilet, and 100 needing the toilet the most.
@@ -23,7 +23,7 @@ public class Pet{
 	private int hungerLevel;
 	private int tiredLevel;
 	private int playfulLevel;
-	private int toiletLevel;
+	private int toiletLevel; // change to boolean? 
 	private int mood;
 	private boolean isAlive;
 	private int weight;
@@ -108,10 +108,13 @@ public class Pet{
 		return mood;
 	}
 	
+
 	/**
 	 * The getter method for the property isAlive.
 	 * @return Returns whether or not the pet is alive, true means pet is alive, false means pet is dead.
 	 */
+	
+	
 	public boolean getIsAlive(){
 		return isAlive;
 	}
@@ -180,10 +183,12 @@ public class Pet{
 		mood = petMood;
 	}
 	
+	
 	/**
 	 * The setter method for the property isAlive.
 	 * @param alive Whether or not the pet is alive will be updated to this, true means pet is alive, false means pet is dead.
 	 */
+	
 	public void setIsAlive(boolean alive){
 		isAlive = alive;
 	}
@@ -218,16 +223,63 @@ public class Pet{
 	 * A pet will need to visit the toilet more after a big (high nutrition) meal than after a small meal.
 	 * Tastier food will make the pet happier, even more so if it is the pet's favourite food.
 	 * The pet should get heavier when it eats.
+	 * 
+	 * 
+	 * Weight can be changed by hungerLevel. Pets gain weight when the hungerlevel below 0 and lose weight when hungerlevel above 50.
+	 
+	 * 
+	 * 
 	 * @param foodToBeEaten The food that the pet will eat.
 	 */
 	public void feed(Food foodToBeEaten){
-		/**
-		 * 
-		 * 
-		 * please fill in
-		 * 
-		 */
-	}
+		int feedImprovement; // For hungerLevel
+		int moodImprovement; // I think we should set a variable for moodCo in Species, so we can calculate the value of improvement in mood.
+		int currentHungerLevel = this.getHungerLevel();
+		int currentMood = this.getMood();
+		int currentWeight = this.getWeight();
+		int changingWeight; // are we going to have different rate of changingweight for different species or same? my code is for same rate.
+		int currentToiletLevel = this.getToiletLevel();
+		boolean currentSick = this.getIsSick();
+		
+		
+		
+		feedImprovement = this.getFood().getNutritionalValue() *(1 - this.getPetSpecies().getHungerCo()); // Nutritional_Value * HungerCo
+		foodToBeEaten.setHungerLevel(currentHungerLevel - feedImprovement);
+		
+		
+		if(currentMood == 100){
+			moodImprovement = 0
+		}else{
+			moodImprovement = (this.getFood().getTastiness() * this.getPetSecies().getMoodCo())/100;
+		}
+		if(this.getPetSpecies().getFavFood() == foodToBeEaten){
+			moodImprovement = (int) (moodImprovement * 1.5)	
+		}else{
+			moodImprovement = moodImprovement;
+		}
+		if(currentMood + moodImprovement >= 100){
+			this.setMood(100);
+		}else{
+			this.setMood(currentMood + moodImprovement);
+		}
+		
+		changingWeight = (this.getHungerLevel - feedImprovement + toyToBePlayed.getExerciseRequired())  ;// (hungerLevel + ExerciseRequired) * 0.05 
+		foodToBeEaten.setWeight(currentWeight + changingWeight);// currentWeight = current_weight + changingWeight 
+		ratio_weight = this.getWeight() / this.getPetSpecies().getOriginalWeight();
+		if (ratio_weight > 2 || ratio_weight < 0.5 ){
+			this.getIsSick() == True;
+		}else{
+			this.getIsSick() == False
+		}
+		
+		if (foodImprovement > 70 ){
+			this.setToiletLevel(currentToiletLevel * (1.5 + this.getPetSpecies().getTolietCo())) 
+		}else{
+			this.getToiletLevel(currentToiletLevel * (1 + this.getPetSpecies().getTolietCo())) 
+		}
+		
+		
+
 	
 	/**
 	 * The play() method will make the pet play with the specified toy.
@@ -243,6 +295,7 @@ public class Pet{
 		int currentPlayLevel = this.getPlayfulLevel();
 		int currentToyQuality = toyToBePlayed.getToyQuality();
 		int damageByPet = this.getPetSpecies().getDamage();
+		
 		playImprovement = (this.getPlayfulLevel() * this.getPetSpecies().getPlayCo())/100;
 		if(this.getPetSpecies().getFavToy() == toyToBePlayed){
 			playImprovement = (int) (playImprovement * 1.5);
