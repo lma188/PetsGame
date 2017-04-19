@@ -17,6 +17,8 @@ public class Pet{
 	 * @param isMisbehaving Whether or not the pet is misbehaving. true means the pet is misbehaving, false means the pet is not misbehaving.
 	 * @param PET_SPECIES The Species of the pet.
 	 * @param isSick Whether or not the pet is sick. true means the pet is sick, false means the pet is healthy.
+	 * @param actions How many actions this pet has performed during a day.
+	 * @param beenRevived Whether or not the pet has been revived from death before.
 	 */
 
 	private final String PET_NAME;
@@ -30,6 +32,8 @@ public class Pet{
 	private boolean isMisbehaving;
 	private final Species PET_SPECIES;
 	private boolean isSick;
+	public int actions;
+	private boolean beenRevived;
 	
 	/**
 	 * The constructor method of Pet.
@@ -50,6 +54,8 @@ public class Pet{
 		weight = this.getPetSpecies().getOriginalWeight();
 		isMisbehaving = false;
 		isSick = false;
+		actions = 0;
+		beenRevived = false;
 	}
 	
 	/**
@@ -144,6 +150,22 @@ public class Pet{
 	}
 	
 	/**
+	 * The getter method for the property actions.
+	 * @return Returns how many actions the pet has performed today.
+	 */
+	public int getActions(){
+		return actions;
+	}
+	
+	/**
+	 * The getter method for the property beenRevived.
+	 * @return Returns whether or not the pet has been revived from death before or not.
+	 */
+	public boolean getBeenRevived(){
+		return beenRevived;
+	}
+	
+	/**
 	 * The setter method for the property hungerLevel.
 	 * @param hunger The hunger level that the pet will be set to have, a rating from 0-100.
 	 */
@@ -219,6 +241,25 @@ public class Pet{
 	
 	
 	/**
+	 * The setter method for the property actions.
+	 * @param numActions The number of actions the pet will be set to have done today.
+	 */
+	public void setActions(int numActions){
+		actions = numActions;
+	}
+	
+	/**
+	 * The setter method for the property beenRevived. Will only accept being changed to true.
+	 * @param revived Whether or not the pet has been revived from death or not.
+	 */
+	public void setBeenRevived(boolean revived){
+		if(revived == true){
+			beenRevived = revived;
+		}
+	}
+	
+	
+	/**
 	 * The feed() method will feed the specified food the pet.
 	 * The hunger of the pet is effected by the nutritional value of the food. Good food will completley fill the pet up.
 	 * A pet will need to visit the toilet more after a big (high nutrition) meal than after a small meal.
@@ -281,13 +322,11 @@ public class Pet{
 	 * @param toyToBePlayed The toy that will be played with.
 	 */
 	public void play(Toy toyToBePlayed){
-		int playImprovement;
+		int playImprovement = 30;
 		int currentMood = this.getMood();
 		int currentPlayLevel = this.getPlayfulLevel();
 		int currentToyQuality = toyToBePlayed.getToyQuality();
 		int damageByPet = this.getPetSpecies().getDamage();
-		
-		playImprovement = (this.getPlayfulLevel() * this.getPetSpecies().getPlayCo())/100;
 		if(this.getPetSpecies().getFavToy() == toyToBePlayed){
 			playImprovement = (int) (playImprovement * 1.5);
 		}
