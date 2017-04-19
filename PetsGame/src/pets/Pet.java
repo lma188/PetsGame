@@ -274,24 +274,22 @@ public class Pet{
 		int currentHungerLevel = this.getHungerLevel();
 		int currentMood = this.getMood();
 		int currentWeight = this.getWeight();
-		int changingWeight; for same rate.
+		int changingWeight;
 		int currentToiletLevel = this.getToiletLevel();
 		
 		
 		
-		feedImprovement = this.getFood().getNutritionalValue() * 0.7; 
-		foodToBeEaten.setHungerLevel(currentHungerLevel - feedImprovement);
+		feedImprovement = (int) (foodToBeEaten.getNutritionalValue() * 0.7); 
+		this.setHungerLevel(currentHungerLevel - feedImprovement);
 		
 		
 		if(currentMood == 100){
 			moodImprovement = 0;
 		}else{
-			moodImprovement = (this.getFood().getTastiness() * 0.3)/100;
+			moodImprovement = (int) (foodToBeEaten.getTastiness() * 0.3)/100;
 		}
 		if(this.getPetSpecies().getFavFood() == foodToBeEaten){
 			moodImprovement = (int) (moodImprovement * 1.5);	
-		}else{
-			moodImprovement = moodImprovement;
 		}
 		if(currentMood + moodImprovement >= 100){
 			this.setMood(100);
@@ -299,17 +297,17 @@ public class Pet{
 			this.setMood(currentMood + moodImprovement);
 		}
 		
-		changingWeight = this.getPetSecies.getWeight() * 0.2;
-		foodToBeEathen.setWeight(currentWeight + changingWeight);
+		changingWeight = (int) (this.getWeight() * 0.2);
+		this.setWeight(currentWeight + changingWeight);
 		
 		
 		
 		if (feedImprovement > 50 ){
-			this.setToiletLevel(currentToiletLevel + 1.5 * feedImprovement);
+			this.setToiletLevel((int) (currentToiletLevel + 1.5 * feedImprovement));
 		}else{
-			this.getToiletLevel(currentToiletLevel + 0.7 * feedImprovement);
+			this.setToiletLevel((int) (currentToiletLevel + 0.7 * feedImprovement));
 		}
-		
+	}
 		
 
 	
