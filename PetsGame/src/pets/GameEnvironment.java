@@ -113,6 +113,51 @@ public class GameEnvironment {
 	}
 	
 	
+	/**
+	 * 
+	 */
+	
+	public void setUpGame(){ //???
+		
+	}
+	
+	/**
+	 * This method decide how many players to play the game at same time.
+	 * @param numPlayers The number of players playing game together.
+	 */
+	public void choosePlayers(int numPlayers){
+		players = numPlayers
+	}
+	/**
+	 * This method choose a pet from Species by adding the pet to player inventory.
+	 * @param petToBeChoosen The pet which players picked up from the species.
+	 */
+	
+	
+	public void choosePets(Species petToBeChoosen){
+		this.playersPets.add(toBeChoosend);
+	}
+	
+	
+	/**
+	 * This method for deciding how many day to play.
+	 * @param days the total number of playing days.
+	 */
+	
+	public void main(int days){
+		playtime = days
+	}
+	
+	/**
+	 * This method record the final score of players achivement from the game.
+	 * @param score the score which player gained from the game.
+	 */
+	public void finishGame(int score){
+		finalscore = score
+	}
+	
+	
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 	}
