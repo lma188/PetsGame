@@ -30,7 +30,7 @@ public class Player {
 	public Player(String name, int amountPets, GameEnvironment game){
 		PLAYER_NAME = name;
 		NUM_PETS = amountPets;
-		balance = 100 * this.getNumPets() * game.getNumDays();
+		balance = 70 * this.getNumPets() * game.getNumDays();
 		PLAYERS_PETS = new Pet[this.getNumPets()];
 		playersToys = new ArrayList<Toy>();
 		playersFood = new ArrayList<Food>();

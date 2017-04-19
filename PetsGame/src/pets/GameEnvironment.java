@@ -1,4 +1,5 @@
 package pets;
+import java.util.ArrayList;
 
 /**
  * The GameEnvironment class is the main class that runs the game.
@@ -32,11 +33,13 @@ public class GameEnvironment {
 	 * @param foodAvailable The list of foods available for use in the game.
 	 * @param toysAvailable The list of toys available for use in the game.
 	 * @param speciesAvailable The list of species available for the player to choose from
+	 * @param namesList The list of names that have been used within the game, as player or pet names.
 	 */
 
 	public final Player[] PLAYER_LIST;
 	public final int NUM_DAYS;
 	public final int NUM_PLAYERS;
+	public ArrayList<String> namesList;
 	
 	public static final Food PIZZA = new Food("Pizza", 40, 90, 70);
 	public static final Food CHOCOLATE = new Food("Chocolate (Dog Friendly)", 30, 95, 30);
@@ -110,6 +113,15 @@ public class GameEnvironment {
 	 */
 	public static Toy[] getToysAvailable(){
 		return toysAvailable;
+	}
+	
+	
+	/**
+	 * The getter method for the property namesList.
+	 * @return Returns the list of names that have been used within the game, as player or pet names.
+	 */
+	public ArrayList<String> getNamesList(){
+		return namesList;
 	}
 	
 	
