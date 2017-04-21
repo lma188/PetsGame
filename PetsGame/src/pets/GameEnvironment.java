@@ -304,7 +304,7 @@ public class GameEnvironment {
 	}
 	
 	public void goToStore(Player p){
-		p.printInventory();
+		p.printSummaryInventory();
 		p.printBalance();
 		this.printStore();
 		this.askForPurchase(p);
