@@ -1,5 +1,6 @@
 package pets;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -245,6 +246,68 @@ public class GameEnvironment {
 			}
 		}
 		return players;
+	}
+	
+	public void printStore(){
+		System.out.println("The items available for you to purchase in the store are as follows:");
+		System.out.println("Foods");
+		int i = 0;
+		for(i = 0; i<foodAvailable.length; i++){
+			Food f = foodAvailable[i];
+			System.out.println(String.format("%d. %s. Nutrition: %d/100. Tastiness: %d/100. Price: %d coins.", i + 1, f.getFoodName(), f.getNutritionalValue(), f.getTastiness(), f.getFoodPrice()));
+		}
+		System.out.println("Toys:");
+		for(int n = 0; n<toysAvailable.length; n++){
+			Toy t = toysAvailable[n];
+			System.out.println(String.format("%d. %s. Exercise done by pet when used: %d/100. Price: %d coins.", (i + n + 1), t.getToyName(), t.getExerciseRequired(), t.getToyPrice()));
+		}
+	}
+	
+	public void askForPurchase(Player p){
+		boolean again = true;
+		int tryInt;
+		boolean confirmed;
+		do{
+			System.out.println("Select an item to purchase by entering it's store code (number before the item), or exit the store by entering 0");
+			try{
+				tryInt = input.nextInt();
+				String rest = input.nextLine();
+			}
+			catch(InputMismatchException ime){
+				System.out.println("Please either enter the store code of an item, or 0 to exit the store.");
+				break;
+			}
+			if(tryInt == 0){
+				again = false;
+				confirmed = this.confirmInput("Please confirm that you would like to leave the store, 1 to confirm, anything else to cancel", "You have confirmed that you are leaving the store", "Request to leave the store has been cancelled", "1");
+				if(confirmed == false){
+					again = true;
+				}
+			}else if(tryInt > (foodAvailable.length + toysAvailable.length) || tryInt < 0){
+				System.out.println("Please enter a valid store code");
+			}else{
+				if(tryInt < foodAvailable.length + 1){
+					Food f = foodAvailable[tryInt - 1];
+					confirmed = this.confirmInput(String.format("%s, are you sure you would like to purchase '%s' from the store? Enter 1 to confirm, anything else to cancel", p.getPlayerName(), f.getFoodName()), String.format("You have confirmed the purchase of '%s'", f.getFoodName()), String.format("Your request to purchase '%s' has been cancelled", f.getFoodName()), "1");
+					if(confirmed == true){
+						p.purchaseFood(f);
+					}
+				}else{
+					Toy t = toysAvailable[tryInt - foodAvailable.length - 1];
+					confirmed = this.confirmInput(String.format("%s, are you sure you would like to purchase '%s' from the store? Enter 1 to confirm, anything else to cancel", p.getPlayerName(), t.getToyName()), String.format("You have confirmed the purchase of '%s'", t.getToyName()), String.format("Your request to purchase '%s' has been cancelled", t.getToyName()), "1");
+					if(confirmed == true){
+						p.purchaseToy(t);
+					}
+				}
+			}
+		}while(again);
+	}
+	
+	public void goToStore(Player p){
+		p.printInventory();
+		p.printBalance();
+		this.printStore();
+		this.askForPurchase(p);
 	}
 	
 	public static void main(String[] args) {

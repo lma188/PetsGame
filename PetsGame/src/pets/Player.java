@@ -1,5 +1,5 @@
 package pets;
-import java.util.ArrayList;
+import java.util.HashMap;
 /**
  * This class provides the information of a player in the game, this includes the player's name, balance, their pets and their inventory of food and toys.
  * @author ltt19
@@ -11,15 +11,15 @@ public class Player {
 	 * @param balance The balance of the player available to be spent in the store.
 	 * @param NUM_PETS The number of pets the player has chosen to have in the game.
 	 * @param PLAYERS_PETS A list of the pets the player has in the game.
-	 * @param playersToys A list of the toys the player has in their inventory.
-	 * @param playersFood A list of the foods the player has in their inventory.
+	 * @param playersToys A hashmap of the toys the player has in their inventory.
+	 * @param playersFood A hashmap of the foods the player has in their inventory.
 	 */
 	private final String PLAYER_NAME;
 	private int balance;
 	private final int NUM_PETS;
 	public final Pet[] PLAYERS_PETS;
-	public ArrayList<Toy> playersToys;
-	public ArrayList<Food> playersFood;
+	public HashMap<Toy, Integer> playersToys;
+	public HashMap<Food, Integer> playersFood;
 	
 	/**
 	 * The constructor method initialises the name, balance worked out for the number of pets and the number of days in the game, creates the empty inventory, and an empty list for the player's pets to be stored in.
@@ -32,8 +32,8 @@ public class Player {
 		NUM_PETS = amountPets;
 		balance = 70 * this.getNumPets() * game.getNumDays();
 		PLAYERS_PETS = new Pet[this.getNumPets()];
-		playersToys = new ArrayList<Toy>();
-		playersFood = new ArrayList<Food>();
+		playersToys = new HashMap<Toy, Integer>();
+		playersFood = new HashMap<Food, Integer>();
 	}
 	
 	/**
@@ -81,7 +81,12 @@ public class Player {
 	 * @param foodTBPurchased The food that the player is purchasing from the store.
 	 */
 	public void purchaseFood(Food foodTBPurchased){
-		this.playersFood.add(foodTBPurchased);
+		Integer i = playersFood.get(foodTBPurchased);
+		if(i == null){
+			playersFood.put(foodTBPurchased, 1);
+		}else{
+			playersFood.put(foodTBPurchased, i + 1);
+		}
 		this.setBalance(this.getBalance() - foodTBPurchased.getFoodPrice());
 	}
 	
@@ -90,8 +95,37 @@ public class Player {
 	 * @param toyTBPurchased The toy the player is purchasing from the store.
 	 */
 	public void purchaseToy(Toy toyTBPurchased){
-		this.playersToys.add(toyTBPurchased);
+		Integer i = playersToys.get(toyTBPurchased);
+		if(i == null){
+			playersToys.put(toyTBPurchased, 1);
+		}else{
+			playersToys.put(toyTBPurchased, i + 1);
+		}
 		this.balance = this.balance - toyTBPurchased.getToyPrice();
+	}
+	
+	public void printInventory(){
+		System.out.println(String.format("%s, your inventory contains:", this.getPlayerName()));
+		System.out.println("Foods:");
+		for(Food f : GameEnvironment.foodAvailable){
+			Integer n = playersToys.get(f);
+			if(n == null){
+				n = 0;
+			}
+			System.out.println(String.format("%s x%d", f.getFoodName(), n));
+		}
+		System.out.println("Toys:");
+		for(Toy t : GameEnvironment.toysAvailable){
+			Integer n = playersFood.get(t);
+			if(n == null){
+				n = 0;
+			}
+			System.out.println(String.format("%s x%d", t.getToyName(), n));
+		}
+	}
+	
+	public void printBalance(){
+		System.out.println(String.format("%s, your balance is %d coins", this.getPlayerName(), this.getBalance()));
 	}
 	
 	public static void main(String[] args) {
