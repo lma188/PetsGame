@@ -1,5 +1,6 @@
 package pets;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * The GameEnvironment class is the main class that runs the game.
@@ -34,12 +35,14 @@ public class GameEnvironment {
 	 * @param toysAvailable The list of toys available for use in the game.
 	 * @param speciesAvailable The list of species available for the player to choose from
 	 * @param namesList The list of names that have been used within the game, as player or pet names.
+	 * @param input The scanner that will handle the keyboard input for the commandline.
 	 */
 
 	public final Player[] PLAYER_LIST;
 	public final int NUM_DAYS;
 	public final int NUM_PLAYERS;
 	public ArrayList<String> namesList;
+	public Scanner input = new Scanner(System.in);
 	
 	public static final Food PIZZA = new Food("Pizza", 40, 90, 70);
 	public static final Food CHOCOLATE = new Food("Chocolate (Dog Friendly)", 30, 95, 30);
@@ -66,6 +69,10 @@ public class GameEnvironment {
 	public static final Food[] foodAvailable = {PIZZA, CHOCOLATE, BURGER, SPAGHETTI, BURRITOS, KALE};
 	public static final Toy[] toysAvailable = {BALL, TWINE, TEDDY_BEAR, CHEW_TOY, BELL, PLAYHOUSE};
 	public static final Species[] speciesAvailable = {DOG, CAT, BIRD, SNAKE, LION, PANDA};
+	
+	public GameEnvironment(){
+		PLAYER_LIST = this.setUpPlayers();
+	}
 	
 	/**
 	 * The getter method for the property PLAYER_LIST.
@@ -124,6 +131,121 @@ public class GameEnvironment {
 		return namesList;
 	}
 	
+	public String askName(String prompt, String errorMessage){
+		boolean again = false;
+		String name = null;
+		do{
+			System.out.println(prompt);
+			String tryName = input.nextLine();
+			tryName = tryName.trim();
+			if(namesList.contains(tryName)){
+				again = true;
+				System.out.println(errorMessage);
+			}else{
+				again = false;
+				boolean confirmation = this.confirmInput(String.format("Please confirm you would like to use the name %s, type 1 to confirm, anything else to cancel", tryName), String.format("The name '%s' has been confirmed.", tryName), String.format("Name choice '%s' has been cancelled", tryName), "1");
+				if(confirmation == true){
+					name = tryName;
+					namesList.add(name);
+				}else{
+					again = true;
+				}
+			}
+		}while(again);
+		return name;
+	}
+	
+	public int askNumPets(String prompt, String errorMessage){
+		int numPets = 0;
+		boolean again = false;
+		do{
+			System.out.println(prompt);
+			String tryNumPets = input.nextLine();
+			tryNumPets = tryNumPets.trim();
+			if(tryNumPets == "1" || tryNumPets == "2" || tryNumPets == "3"){
+				again = false;
+				boolean confirmation = this.confirmInput(String.format("Please confirm you would like to use %d pets, type 1 to confirm, anything else to cancel", tryNumPets), String.format("You have confirmed you will use %d pets", tryNumPets), String.format("The request to use %d pets in the game has been cancelled", tryNumPets), "1");
+				if(confirmation == true){
+					numPets = Integer.valueOf(tryNumPets);
+				}else{
+					again = true;
+				}
+			}else{
+				again = true;
+				System.out.println(errorMessage);
+			}
+		}while(again);
+		return numPets;
+	}
+	
+	public boolean confirmInput(String prompt, String confirmedMessage, String cancelledMessage, String confirmValue){
+		System.out.println(prompt);
+		String confirmation = input.nextLine();
+		confirmation = confirmation.trim();
+		if(confirmation == confirmValue){
+			System.out.println(confirmedMessage);
+			return true;
+		}else{
+			System.out.println(cancelledMessage);
+			return false;
+		}
+	}
+	
+	public void showSpeciesAvailable(){
+		for(int i=0; i<speciesAvailable.length; i++){
+			Species s = speciesAvailable[i];
+			System.out.println(String.format("%d. Species: %s", i+1, s.getSpeciesName()));
+			System.out.println(String.format("Favourite Toy: %s", s.getFavToy().getToyName()));
+			System.out.println(String.format("Favourite Food: %s", s.getFavFood().getFoodName()));
+			System.out.println(String.format("Damage done to toy per use: %d points of toy's quality (starts at 100)", s.getDamage()));
+			System.out.println(String.format("Hunger increase per day: %d points of hunger, where hunger is a rating of 0-100", s.getHungerCo()));
+			System.out.println(String.format("Tiredness increase per day: %d points of tiredness, where tiredness is a rating of 0-100", s.getTiredCo()));
+			System.out.println(String.format("Playfulness increase per day: %d points of playfulness, where playfulness is a rating of 0-100", s.getPlayCo()));
+			System.out.println(String.format("Toilet need increase per day: %d points of toilet need, where toilet need is a rating of 0-100", s.getToiletCo()));
+			System.out.println(String.format("Starting weight: %d kg", s.getOriginalWeight()));
+		}
+	}
+	
+	public Species askSpecies(String prompt, String errorMessage){
+		Species pSpecies = null;
+		boolean again = false;
+		do{
+			System.out.println(prompt);
+			String trySpecies = input.nextLine();
+			trySpecies = trySpecies.trim();
+			if(trySpecies == "1" || trySpecies == "2" || trySpecies == "3" || trySpecies == "4" || trySpecies == "5" || trySpecies == "6"){
+				again = false;
+				String speciesName = speciesAvailable[Integer.valueOf(trySpecies) - 1].getSpeciesName();
+				boolean confirmed = this.confirmInput(String.format("Please confirm you would like your pet to be of species '%s', type 1 to confirm, anything else to cancel", speciesName), String.format("You have confirmed that you will use the species '%s'", speciesName), String.format("Species choice '%s' has been cancelled", speciesName), "1");
+				if(confirmed == true){
+					pSpecies = speciesAvailable[Integer.valueOf(trySpecies) - 1];
+				}else{
+					again = true;
+				}
+			}else{
+				again = true;
+				System.out.println(errorMessage);
+			}
+		}while(again);
+		return pSpecies;
+	}
+	
+	public Player[] setUpPlayers(){
+		Player[] players = new Player[this.getNumPlayers()];
+		for(int pNum = 1; pNum < this.getNumPlayers() + 1; pNum++){
+			String pName = this.askName(String.format("Player %d, please choose a name", pNum), String.format("Player %d, the name you entered has already been used, please choose another.", pNum));
+			int pNumPets = this.askNumPets(String.format("%s, please enter how many pets you would like to use in the game. Must be 1, 2, or 3.", pName), String.format("%s, your number of pets was not valid, you must choose 1, 2, or 3 pets.", pName));
+			players[pNum-1] = new Player(pName, pNumPets, this);
+			for(int petNum = 1; petNum < pNumPets + 1; petNum++){
+				System.out.println("The species available to you are:");
+				this.showSpeciesAvailable();
+				Species pSpecies = this.askSpecies(String.format("%s, please choose the species of pet %d. Enter the number beside the species you would like to choose.", pName, petNum), String.format("%s, you must choose from 1, 2, 3, 4, 5, or 6.", pName));
+				String petName = this.askName(String.format("%s, please choose a name for your pet of species %s.", pName, pSpecies.getSpeciesName()), String.format("%s, the name you entered has already been used, please choose another", pName));
+				players[pNum-1].PLAYERS_PETS[petNum-1] = new Pet(petName, pSpecies);
+			}
+		}
+		return players;
+	}
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
