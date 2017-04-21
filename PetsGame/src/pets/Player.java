@@ -104,7 +104,7 @@ public class Player {
 		this.balance = this.balance - toyTBPurchased.getToyPrice();
 	}
 	
-	public void printInventory(){
+	public void printSummaryInventory(){
 		System.out.println(String.format("%s, your inventory contains:", this.getPlayerName()));
 		System.out.println("Foods:");
 		for(Food f : GameEnvironment.foodAvailable){
