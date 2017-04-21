@@ -258,6 +258,24 @@ public class Pet{
 		}
 	}
 	
+	public void viewPetStats(){
+		System.out.println(String.format("Pet: %s", this.getPetName()));
+		System.out.println(String.format("Hunger: %d%%", this.getHungerLevel()));
+		System.out.println(String.format("Tiredness: %d%%", this.getTiredLevel()));
+		System.out.println(String.format("Playfulness: %d%%", this.getPlayfulLevel()));
+		System.out.println(String.format("Toilet Need: %d%%", this.getToiletLevel()));
+		System.out.println(String.format("Mood: %d%%", this.getMood()));
+		System.out.println(String.format("Weight: %dkg", this.getWeight()));
+		System.out.println(String.format("Species: %s", this.getPetSpecies().getSpeciesName()));
+		System.out.println(String.format("Is Alive? %b", this.getIsAlive()));
+		System.out.println(String.format("Is Misbehaving? %b", this.getIsMisbehaving()));
+		System.out.println(String.format("Is Sick? %b", this.getIsSick()));
+		System.out.println(String.format("Actions used today: %d", this.getActions()));
+		System.out.println("Enter anything to get back to the main menu");
+		String backToMenu = input.nextLine();
+		
+	}
+	
 	
 	/**
 	 * The feed() method will feed the specified food the pet.
