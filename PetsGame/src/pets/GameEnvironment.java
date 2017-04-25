@@ -354,6 +354,11 @@ public class GameEnvironment {
 		this.askForUseInventory(p, pet);
 	}
 	
+	public void viewPetStats(Pet pet){
+		pet.viewStats();
+		System.out.println("Enter anything to get back to menu");
+		input.nextLine();
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 	}
