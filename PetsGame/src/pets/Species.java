@@ -25,7 +25,7 @@ public class Species {
 	private final int TIRED_CO;
 	private final int PLAY_CO;
 	private final int TOILET_CO;
-	private final int ORIGINAL_WEIGHT;
+	private final float ORIGINAL_WEIGHT;
 	
 	/**
 	 * @param speciesName The name of the species chosen.
@@ -118,7 +118,7 @@ public class Species {
 	 * The getter method for the property ORIGINAL_WEIGHT.
 	 * @return Returns the original weight of a pet of this species.
 	 */
-	public int getOriginalWeight(){
+	public float getOriginalWeight(){
 		return ORIGINAL_WEIGHT;
 	}
 	
