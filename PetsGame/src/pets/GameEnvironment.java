@@ -47,6 +47,7 @@ public class GameEnvironment {
 	public final Player[] PLAYER_LIST;
 	public final int NUM_DAYS;
 	public final int NUM_PLAYERS;
+	public final ArrayList<Pet> PET_LIST; 
 	
 	public ArrayList<String> namesList;
 	public static final Scanner input = new Scanner(System.in);
@@ -284,7 +285,9 @@ public class GameEnvironment {
 				this.showSpeciesAvailable();
 				Species pSpecies = this.askSpecies(String.format("%s, please choose the species of pet %d. Enter the number beside the species you would like to choose.", pName, petNum), String.format("%s, you must choose from 1, 2, 3, 4, 5, or 6.", pName));
 				String petName = this.askName(String.format("%s, please choose a name for your pet of species %s.", pName, pSpecies.getSpeciesName()), String.format("%s, the name you entered has already been used, please choose another", pName));
-				players[pNum-1].PLAYERS_PETS[petNum-1] = new Pet(petName, pSpecies);
+				Pet newPet = new Pet(petName, pSpecies);
+				players[pNum-1].PLAYERS_PETS[petNum-1] = newPet;
+				PETS_LIST.add(newPet);
 			}
 		}
 		return players;
