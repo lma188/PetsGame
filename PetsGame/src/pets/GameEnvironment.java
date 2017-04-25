@@ -464,11 +464,12 @@ public class GameEnvironment {
 	
 	/**
 	 * The method for the help section.
-	 * @param tryNum The number of help section. 1 = Game Instruction; 2 = Tips for having a pet; 3 = Tips for buying stuff for pet.
+	 * @param tryNum The number of help section. 1 = Game Instruction; 2 = Tips for having a pet; 3 = Tips for buying stuff for pet; anything else = leave.
 	 * @param tryAny The option of whether stay in help section or not. 1 = go back to help section; anything else = leave.
 	 * @param errorMessage The content of error message when player type anything wrong.
 	 */
-	public void askHelp(int tryNum, int tryAny, String errorMessage) throws IOException{
+	
+	public void askHelp(int tryNum, String tryAny) throws IOException{
 		
 		while (true) {
 			try{
@@ -476,53 +477,51 @@ public class GameEnvironment {
 				System.out.println("1.Game Instruction");
 				System.out.println("2.Tips for having a pet");
 				System.out.println("3.Tips for buying stuff for pet");
-				System.out.println("Please type the number of help section which you would like to know or anything else to leave.");
+				System.out.println("Please type the number of section you would like to know or anything else to leave.");
 				tryNum = input.nextInt();  
 				if(tryNum == 1) {
-					BufferedReader r = new BufferedReader(new FileReader("Game Instruction.txt"));
-					String prompt1 = "", line = null;
+					BufferedReader r = new BufferedReader(new FileReader("/Users/lucreziaq999/Documents/Game Instruction.txt"));
+					String line = null;
 					while ((line = r.readLine()) != null) {
-						prompt1 += line;
+						System.out.println(line);
 					}
-					System.out.print(prompt1);
 					r.close();
 					System.out.println("");
-					System.out.println("Type '1' back to help or anything else to quit.");
-					tryAny = input.nextInt();
-					if(tryAny == 1 ){
+					System.out.println("Type 'b' to back help menue or anything else to quit.");
+					tryAny = input.next();
+					if(tryAny.equals("b")){
 					}else{
+						System.out.println("Good Luck!");
 						break;
 					}
 			    }else if(tryNum == 2){
-					BufferedReader r = new BufferedReader(new FileReader("Tips for having a pet.txt"));
-					String prompt2 = "", line = null;
+					BufferedReader r = new BufferedReader(new FileReader("/Users/lucreziaq999/Documents/Tips for having a pet.txt"));
+					String line = null;
 					while ((line = r.readLine()) != null) {
-						prompt2 += line;
+						System.out.println(line);
 					}
-					System.out.print(prompt2);
 					r.close();
 					System.out.println("");
-					System.out.println("Type anything to quit.");
-					tryAny = input.nextInt();
-					r.close();
-					tryAny = input.nextInt();
-					if(tryAny == 1 ){
+					System.out.println("Type 'b' to back help menue or anything else to quit.");
+					tryAny = input.next();
+					if(tryAny.equals("b")){
 					}else{
+						System.out.println("Good Luck!");
 						break;
 					}
 				}else if(tryNum == 3) {
-					BufferedReader r = new BufferedReader(new FileReader("Tips for buying stuff for pet"));
-					String prompt3 = "", line = null;
+					BufferedReader r = new BufferedReader(new FileReader("/Users/lucreziaq999/Documents/Tips for buying stuff for pet.txt"));
+					String line = null;
 					while ((line = r.readLine()) != null) {
-						prompt3 += line;
+						System.out.println(line);
 					}
-					System.out.print(prompt3);
 					r.close();
 					System.out.println("");
-					System.out.println("Type anything to quit.");
-					tryAny = input.nextInt();
-					if(tryAny == 1 ){
+					System.out.println("Type 'b' to back help menue or anything else to quit.");
+					tryAny = input.next();
+					if(tryAny.equals("b")){
 					}else{
+						System.out.println("Good Luck!");
 						break;
 					}
 				}else{
@@ -532,11 +531,10 @@ public class GameEnvironment {
 		}
 		catch(InputMismatchException i)
 	         {
-	        	 System.out.println(errorMessage);
-	        	 input.next();
-	        	 continue;
+	        	 System.out.println("Good Luck");
+	        	 break;
 	         }		
-		}		
+		}	
 	}
 
 	public static void main(String[] args) {
