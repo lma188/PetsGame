@@ -258,6 +258,22 @@ public class Pet{
 		}
 	}
 	
+	public void viewPetStats(){
+		System.out.println(String.format("Pet: %s", this.getPetName()));
+		System.out.println(String.format("Hunger: %d%%", this.getHungerLevel()));
+		System.out.println(String.format("Tiredness: %d%%", this.getTiredLevel()));
+		System.out.println(String.format("Playfulness: %d%%", this.getPlayfulLevel()));
+		System.out.println(String.format("Toilet Need: %d%%", this.getToiletLevel()));
+		System.out.println(String.format("Mood: %d%%", this.getMood()));
+		System.out.println(String.format("Weight: %dkg", this.getWeight()));
+		System.out.println(String.format("Species: %s", this.getPetSpecies().getSpeciesName()));
+		System.out.println(String.format("Is Alive? %b", this.getIsAlive()));
+		System.out.println(String.format("Is Misbehaving? %b", this.getIsMisbehaving()));
+		System.out.println(String.format("Is Sick? %b", this.getIsSick()));
+		System.out.println(String.format("Actions used today: %d", this.getActions()));
+		
+	}
+	
 	
 	/**
 	 * The feed() method will feed the specified food the pet.
@@ -269,6 +285,7 @@ public class Pet{
 	 * @param foodToBeEaten The food that the pet will eat.
 	 */
 	public void feed(Food foodToBeEaten){
+		this.actions = this.actions + 1;
 		int feedImprovement; 
 		int moodImprovement;
 		int currentHungerLevel = this.getHungerLevel();
@@ -320,6 +337,7 @@ public class Pet{
 	 * @param toyToBePlayed The toy that will be played with.
 	 */
 	public void play(Toy toyToBePlayed){
+		this.actions = this.actions + 1;
 		int playImprovement = 30;
 		int currentMood = this.getMood();
 		int currentPlayLevel = this.getPlayfulLevel();

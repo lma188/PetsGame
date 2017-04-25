@@ -41,6 +41,7 @@ public class GameEnvironment {
 	 * @param toysAvailable The list of toys available for use in the game.
 	 * @param speciesAvailable The list of species available for the player to choose from
 	 * @param namesList The list of names that have been used within the game, as player or pet names.
+	 * @param input The scanner that will handle the keyboard input for the commandline.
 	 */
 
 	public final Player[] PLAYER_LIST;
@@ -51,6 +52,7 @@ public class GameEnvironment {
 	
 	
 	public ArrayList<String> namesList;
+	public static final Scanner input = new Scanner(System.in);
 	
 	
 	public static final Food PIZZA = new Food("Pizza", 40, 90, 70);
@@ -79,25 +81,11 @@ public class GameEnvironment {
 	public static final Toy[] toysAvailable = {BALL, TWINE, TEDDY_BEAR, CHEW_TOY, BELL, PLAYHOUSE};
 	public static final Species[] speciesAvailable = {DOG, CAT, BIRD, SNAKE, LION, PANDA};
 	
-	
-	
-	/**
-	 * Constructor method of GameEnironment.
-	 * Set number of player, playing days and difficulty of game.
-	 * 
-	 * 
-	 * @param player_list The list of player.
-	 * @param days The playing day of game for players, 1-30.
-	 * @param players The number of players to play the game together, 1-4.
-	 * @param score_days The score which player achive in each day. 
-	 */
-	
-	public GameEnvironment(Player[] player_list, int score_day){
-		PLAYER_LIST = player_list;
-		NUM_DAYS = this.getNumDays();
-		NUM_PLAYERS = this.getNumPlayers();
-		Score = score_day;
-		
+
+	public GameEnvironment(){
+    NUM_DAYS = this.askNumDays();
+    NUM_PLAYERS = this.askNumPlayers();
+		PLAYER_LIST = this.setUpPlayers();
 	}
 	
 	/**
@@ -161,9 +149,7 @@ public class GameEnvironment {
 		return namesList;
 	}
 	
-	/**
-	 * 
-	 */
+
 	public boolean confirmInput(String prompt, String confirmedMessage, String cancelledMessage, String confirmValue){
 		System.out.println(prompt);
 		String confirmation = input.nextLine();
@@ -183,12 +169,12 @@ public class GameEnvironment {
 	 * Screen will display error message if the input out of range or type in other things.
 	 * @return Return how many players will play the game together. 
 	 */
-	public int askNumPlayers(String prompt, String errorMessage){
+	public int askNumPlayers(){
 		int players = 1;
 		while (true){
 		    try
 	        {
-		    	System.out.println(prompt);
+		    	System.out.println("Please enter the number of players you would like to play in the game");
 			    System.out.println("NB: Maximum players is 4. Minmum is 1.");
 		    	int numPlayers = input.nextInt();
 		        if ( (numPlayers > 4 || numPlayers < 1)) {
@@ -207,7 +193,7 @@ public class GameEnvironment {
 	         }
 	         catch(InputMismatchException i)
 	         {
-	        	 System.out.println(errorMessage);
+	        	 System.out.println("Please enter a whole number between 1 and 4.");
 	        	 input.next();
 	        	 continue;
 	         }
@@ -226,7 +212,7 @@ public class GameEnvironment {
 		while (true){
 			try
 		       {
-		    	System.out.println(prompt);
+		    	System.out.println("Please enter how many days you would like to play the game for");
 				System.out.println("NB: Please choose a number between 1 to 30.");
 				days = input.nextInt();
 				if (days > 30 || days < 1){
@@ -243,21 +229,180 @@ public class GameEnvironment {
 				}
 			catch(InputMismatchException i)
 			    {
-				  System.out.println(errorMessage);
+				  System.out.println("Please enter a whole number between 1 and 30.");
 				  input.next();
 				  continue;
 				}
 		}
 	}
 	
-	/**
-	 * 
-	 */
-	public int main(int days){
-		return Score;
-		
+	
+	public void showSpeciesAvailable(){
+		for(int i=0; i<speciesAvailable.length; i++){
+			Species s = speciesAvailable[i];
+			System.out.println(String.format("%d. Species: %s", i+1, s.getSpeciesName()));
+			System.out.println(String.format("Favourite Toy: %s", s.getFavToy().getToyName()));
+			System.out.println(String.format("Favourite Food: %s", s.getFavFood().getFoodName()));
+			System.out.println(String.format("Damage done to toy per use: %d points of toy's quality (starts at 100)", s.getDamage()));
+			System.out.println(String.format("Hunger increase per day: %d points of hunger, where hunger is a rating of 0-100", s.getHungerCo()));
+			System.out.println(String.format("Tiredness increase per day: %d points of tiredness, where tiredness is a rating of 0-100", s.getTiredCo()));
+			System.out.println(String.format("Playfulness increase per day: %d points of playfulness, where playfulness is a rating of 0-100", s.getPlayCo()));
+			System.out.println(String.format("Toilet need increase per day: %d points of toilet need, where toilet need is a rating of 0-100", s.getToiletCo()));
+			System.out.println(String.format("Starting weight: %d kg", s.getOriginalWeight()));
+		}
 	}
 	
+	public Species askSpecies(String prompt, String errorMessage){
+		Species pSpecies = null;
+		boolean again = false;
+		do{
+			System.out.println(prompt);
+			String trySpecies = input.nextLine();
+			trySpecies = trySpecies.trim();
+			if(trySpecies == "1" || trySpecies == "2" || trySpecies == "3" || trySpecies == "4" || trySpecies == "5" || trySpecies == "6"){
+				again = false;
+				String speciesName = speciesAvailable[Integer.valueOf(trySpecies) - 1].getSpeciesName();
+				boolean confirmed = this.confirmInput(String.format("Please confirm you would like your pet to be of species '%s', type 1 to confirm, anything else to cancel", speciesName), String.format("You have confirmed that you will use the species '%s'", speciesName), String.format("Species choice '%s' has been cancelled", speciesName), "1");
+				if(confirmed == true){
+					pSpecies = speciesAvailable[Integer.valueOf(trySpecies) - 1];
+				}else{
+					again = true;
+				}
+			}else{
+				again = true;
+				System.out.println(errorMessage);
+			}
+		}while(again);
+		return pSpecies;
+	}
+	
+	public Player[] setUpPlayers(){
+		Player[] players = new Player[this.getNumPlayers()];
+		for(int pNum = 1; pNum < this.getNumPlayers() + 1; pNum++){
+			String pName = this.askName(String.format("Player %d, please choose a name", pNum), String.format("Player %d, the name you entered has already been used, please choose another.", pNum));
+			int pNumPets = this.askNumPets(String.format("%s, please enter how many pets you would like to use in the game. Must be 1, 2, or 3.", pName), String.format("%s, your number of pets was not valid, you must choose 1, 2, or 3 pets.", pName));
+			players[pNum-1] = new Player(pName, pNumPets, this);
+			for(int petNum = 1; petNum < pNumPets + 1; petNum++){
+				System.out.println("The species available to you are:");
+				this.showSpeciesAvailable();
+				Species pSpecies = this.askSpecies(String.format("%s, please choose the species of pet %d. Enter the number beside the species you would like to choose.", pName, petNum), String.format("%s, you must choose from 1, 2, 3, 4, 5, or 6.", pName));
+				String petName = this.askName(String.format("%s, please choose a name for your pet of species %s.", pName, pSpecies.getSpeciesName()), String.format("%s, the name you entered has already been used, please choose another", pName));
+				players[pNum-1].PLAYERS_PETS[petNum-1] = new Pet(petName, pSpecies);
+			}
+		}
+		return players;
+	}
+	
+	public void printStore(){
+		System.out.println("The items available for you to purchase in the store are as follows:");
+		System.out.println("Foods");
+		int i = 0;
+		for(i = 0; i<foodAvailable.length; i++){
+			Food f = foodAvailable[i];
+			System.out.println(String.format("%d. %s. Nutrition: %d/100. Tastiness: %d/100. Price: %d coins.", i + 1, f.getFoodName(), f.getNutritionalValue(), f.getTastiness(), f.getFoodPrice()));
+		}
+		System.out.println("Toys:");
+		for(int n = 0; n<toysAvailable.length; n++){
+			Toy t = toysAvailable[n];
+			System.out.println(String.format("%d. %s. Exercise done by pet when used: %d/100. Price: %d coins.", (i + n + 1), t.getToyName(), t.getExerciseRequired(), t.getToyPrice()));
+		}
+	}
+	
+	public void askForPurchase(Player p){
+		boolean again = true;
+		int tryInt;
+		do{
+			System.out.println("Select an item to purchase by entering it's store code (number before the item), or exit the store by entering 0");
+			try{
+				tryInt = input.nextInt();
+				input.nextLine();
+			}
+			catch(InputMismatchException ime){
+				System.out.println("Please either enter the store code of an item, or 0 to exit the store.");
+				again = true;
+				break;
+			}
+			if(tryInt == 0){
+				again = false;
+				System.out.println("You have left the store");
+			}else if(tryInt > (foodAvailable.length + toysAvailable.length) || tryInt < 0){
+				System.out.println("Please enter a valid store code");
+			}else{
+				if(tryInt < foodAvailable.length + 1){
+					Food f = foodAvailable[tryInt - 1];
+					System.out.println(String.format("%s, you have purchased %s", p.getPlayerName(), f.getFoodName()));
+					p.purchaseFood(f);
+					p.printSummaryInventory();
+					p.printBalance();
+				}else{
+					Toy t = toysAvailable[tryInt - foodAvailable.length - 1];
+					System.out.println(String.format("%s, you have purchased %s", p.getPlayerName(), t.getToyName()));
+					p.purchaseToy(t);
+					p.printSummaryInventory();
+					p.printBalance();
+				}
+			}
+		}while(again);
+	}
+	
+	public void goToStore(Player p){
+		p.printSummaryInventory();
+		p.printBalance();
+		this.printStore();
+		this.askForPurchase(p);
+	}
+	
+	public void askForUseInventory(Player p, Pet pet){
+		boolean again = true;
+		int tryInt;
+		do{
+			System.out.println("Select the item in your inventory you would like to use (foods will be eaten, toys will be played with) by entering the number beside the item, or exit inventory by entering 0");
+			try{
+				tryInt = input.nextInt();
+				input.nextLine();
+			}catch(InputMismatchException ime){
+				System.out.println("Please either enter the number beside the item you would like to use, or 0 to exit the inventory");
+				again = true;
+				break;
+			}
+			if(tryInt == 0){
+				again = false;
+				System.out.println("You have left your inventory");
+			}else if(tryInt > (foodAvailable.length + toysAvailable.length) || tryInt < 0){
+				System.out.println("Please enter a valid item code");
+			}else{
+				if(tryInt < foodAvailable.length + 1){
+					Food f = foodAvailable[tryInt - 1];
+					if(p.playersFood.get(f) == 0){
+						again = true;
+						System.out.println(String.format("There are 0 %s in your inventory, please choose a different food", f.getFoodName()));
+					}else{
+						p.removeFromInventory(f);
+						pet.feed(f);
+					}
+				}else{
+					Toy t = toysAvailable[tryInt - foodAvailable.length - 1];
+					if(p.playersToys.get(t) == 0){
+						again = true;
+						System.out.println(String.format("There are 0 %s in your inventory, please choose a different toy", t.getToyName()));
+					}else{
+						p.removeFromInventory(t);
+						pet.play(t);
+					}
+				}
+			}
+		}while(again);
+	}
+	
+	public void goToInventory(Player p, Pet pet){
+		p.printInventory();
+		this.askForUseInventory(p, pet);
+	}
+	
+	public void viewPetStats(Pet pet){
+		pet.viewStats();
+		System.out.println("Enter anything to get back to menu");
+		input.nextLine();
 	
 	/**
 	 * 
