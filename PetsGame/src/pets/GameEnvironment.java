@@ -47,9 +47,6 @@ public class GameEnvironment {
 	public final Player[] PLAYER_LIST;
 	public final int NUM_DAYS;
 	public final int NUM_PLAYERS;
-	public int Score;
-	public Scanner input = new Scanner(System.in);
-	
 	
 	public ArrayList<String> namesList;
 	public static final Scanner input = new Scanner(System.in);
@@ -83,8 +80,8 @@ public class GameEnvironment {
 	
 
 	public GameEnvironment(){
-    NUM_DAYS = this.askNumDays();
-    NUM_PLAYERS = this.askNumPlayers();
+		NUM_DAYS = this.askNumDays();
+		NUM_PLAYERS = this.askNumPlayers();
 		PLAYER_LIST = this.setUpPlayers();
 	}
 	
@@ -207,7 +204,7 @@ public class GameEnvironment {
 	 * It will display error message if player types number out of the range or anything else.
 	 * @return Return the number of days which players want to play in the game.
 	 */
-	public int askNumDays(String prompt, String errorMessage){
+	public int askNumDays(){
 		int days = 0;	
 		while (true){
 			try
@@ -400,10 +397,10 @@ public class GameEnvironment {
 	}
 	
 	public void viewPetStats(Pet pet){
-		pet.viewStats();
+		pet.viewPetStats();
 		System.out.println("Enter anything to get back to menu");
 		input.nextLine();
-	
+	}
 	/**
 	 * 
 	 */
@@ -455,72 +452,6 @@ public class GameEnvironment {
 			}
 		}while(again);
 		return name;
-	}
-	
-	
-	/**
-	 * 
-	 */
-	public void showSpeciesAvailable(){
-		for(int i=0; i<speciesAvailable.length; i++){
-			Species s = speciesAvailable[i];
-			System.out.println(String.format("%d. Species: %s", i+1, s.getSpeciesName()));
-			System.out.println(String.format("Favourite Toy: %s", s.getFavToy().getToyName()));
-			System.out.println(String.format("Favourite Food: %s", s.getFavFood().getFoodName()));
-			System.out.println(String.format("Damage done to toy per use: %d points of toy's quality (starts at 100)", s.getDamage()));
-			System.out.println(String.format("Hunger increase per day: %d points of hunger, where hunger is a rating of 0-100", s.getHungerCo()));
-			System.out.println(String.format("Tiredness increase per day: %d points of tiredness, where tiredness is a rating of 0-100", s.getTiredCo()));
-			System.out.println(String.format("Playfulness increase per day: %d points of playfulness, where playfulness is a rating of 0-100", s.getPlayCo()));
-			System.out.println(String.format("Toilet need increase per day: %d points of toilet need, where toilet need is a rating of 0-100", s.getToiletCo()));
-			System.out.println(String.format("Starting weight: %d kg", s.getOriginalWeight()));
-		}
-	}
-	
-	/**
-	 * 
-	 */
-	public Species askSpecies(String prompt, String errorMessage){
-		Species pSpecies = null;
-		boolean again = false;
-		do{
-			System.out.println(prompt);
-			String trySpecies = input.nextLine();
-			trySpecies = trySpecies.trim();
-			if(trySpecies == "1" || trySpecies == "2" || trySpecies == "3" || trySpecies == "4" || trySpecies == "5" || trySpecies == "6"){
-				again = false;
-				String speciesName = speciesAvailable[Integer.valueOf(trySpecies) - 1].getSpeciesName();
-				boolean confirmed = this.confirmInput(String.format("Please confirm you would like your pet to be of species '%s', type 1 to confirm, anything else to cancel", speciesName), String.format("You have confirmed that you will use the species '%s'", speciesName), String.format("Species choice '%s' has been cancelled", speciesName), "1");
-				if(confirmed == true){
-					pSpecies = speciesAvailable[Integer.valueOf(trySpecies) - 1];
-				}else{
-					again = true;
-				}
-			}else{
-				again = true;
-				System.out.println(errorMessage);
-			}
-		}while(again);
-		return pSpecies;
-	}
-	
-	/**
-	 * 
-	 */
-	public Player[] setUpPlayers(){
-		Player[] players = new Player[this.getNumPlayers()];
-		for(int pNum = 1; pNum < this.getNumPlayers() + 1; pNum++){
-			String pName = this.askName(String.format("Player %d, please choose a name", pNum), String.format("Player %d, the name you entered has already been used, please choose another.", pNum));
-			int pNumPets = this.askNumPets(String.format("%s, please enter how many pets you would like to use in the game. Must be 1, 2, or 3.", pName), String.format("%s, your number of pets was not valid, you must choose 1, 2, or 3 pets.", pName));
-			players[pNum-1] = new Player(pName, pNumPets, this);
-			for(int petNum = 1; petNum < pNumPets + 1; petNum++){
-				System.out.println("The species available to you are:");
-				this.showSpeciesAvailable();
-				Species pSpecies = this.askSpecies(String.format("%s, please choose the species of pet %d. Enter the number beside the species you would like to choose.", pName, petNum), String.format("%s, you must choose from 1, 2, 3, 4, 5, or 6.", pName));
-				String petName = this.askName(String.format("%s, please choose a name for your pet of species %s.", pName, pSpecies.getSpeciesName()), String.format("%s, the name you entered has already been used, please choose another", pName));
-				players[pNum-1].PLAYERS_PETS[petNum-1] = new Pet(petName, pSpecies);
-			}
-		}
-		return players;
 	}
 	
 	

@@ -20,6 +20,7 @@ public class Player {
 	public final Pet[] PLAYERS_PETS;
 	public HashMap<Toy, Integer> playersToys;
 	public HashMap<Food, Integer> playersFood;
+	public int score;
 	
 	/**
 	 * The constructor method initialises the name, balance worked out for the number of pets and the number of days in the game, creates the empty inventory, and an empty list for the player's pets to be stored in.
@@ -40,6 +41,7 @@ public class Player {
 		for(Food f : GameEnvironment.foodAvailable){
 			playersFood.put(f, 0);
 		}
+		score = 0;
 	}
 	
 	/**
