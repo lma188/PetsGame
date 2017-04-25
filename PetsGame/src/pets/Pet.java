@@ -28,7 +28,7 @@ public class Pet{
 	private int toiletLevel; 
 	private int mood;
 	private boolean isAlive;
-	private int weight;
+	private float weight;
 	private boolean isMisbehaving;
 	private final Species PET_SPECIES;
 	private boolean isSick;
@@ -129,7 +129,7 @@ public class Pet{
 	 * The getter method for the property weight.
 	 * @return Returns the weight of the pet in kg.
 	 */
-	public int getWeight(){
+	public float getWeight(){
 		return weight;
 	}
 	
@@ -219,7 +219,7 @@ public class Pet{
 	 * The setter method for the property weight.
 	 * @param petWeight The weight that the pet will be set to have in kg.
 	 */
-	public void setWeight(int petWeight){
+	public void setWeight(float petWeight){
 		weight = petWeight;
 	}
 	
@@ -290,8 +290,8 @@ public class Pet{
 		int moodImprovement;
 		int currentHungerLevel = this.getHungerLevel();
 		int currentMood = this.getMood();
-		int currentWeight = this.getWeight();
-		int changingWeight;
+		float currentWeight = this.getWeight();
+		float changingWeight;
 		int currentToiletLevel = this.getToiletLevel();
 		
 		
@@ -314,7 +314,7 @@ public class Pet{
 			this.setMood(currentMood + moodImprovement);
 		}
 		
-		changingWeight = (int) (this.getWeight() * 0.2);
+		changingWeight = (float) (this.getWeight() * 0.2);
 		this.setWeight(currentWeight + changingWeight);
 		
 		
@@ -374,6 +374,31 @@ public class Pet{
 		}
 	}
 	
+	public void sleep(){
+		this.actions = this.actions + 1;
+		int tiredImprovement = (int) (this.getTiredLevel() * 0.75);
+		if(this.getTiredLevel() - tiredImprovement <= 0){
+			this.setTiredLevel(0);
+		}else{
+			this.setTiredLevel(this.getTiredLevel() - tiredImprovement);
+		}
+	}
+	
+	public void toilet(){
+		this.actions = this.actions + 1;
+		float weightImprovement = (float) (this.getWeight() * 0.2);
+		int toiletImprovement = (int) (this.getToiletLevel() * 0.75);
+		if(this.getToiletLevel() - toiletImprovement <= 0){
+			this.setToiletLevel(0);
+		}else{
+			this.setToiletLevel(this.getToiletLevel()- toiletImprovement);
+		}
+		if(this.getWeight() - weightImprovement <= 0){
+			this.setWeight(0);
+		}else{
+			this.setWeight(this.getWeight() - weightImprovement);
+		}
+	}
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
