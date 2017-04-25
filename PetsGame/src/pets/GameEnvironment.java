@@ -43,7 +43,7 @@ public class GameEnvironment {
 	public final int NUM_DAYS;
 	public final int NUM_PLAYERS;
 	public ArrayList<String> namesList;
-	public Scanner input = new Scanner(System.in);
+	public static final Scanner input = new Scanner(System.in);
 	
 	public static final Food PIZZA = new Food("Pizza", 40, 90, 70);
 	public static final Food CHOCOLATE = new Food("Chocolate (Dog Friendly)", 30, 95, 30);
@@ -266,38 +266,35 @@ public class GameEnvironment {
 	public void askForPurchase(Player p){
 		boolean again = true;
 		int tryInt;
-		boolean confirmed;
 		do{
 			System.out.println("Select an item to purchase by entering it's store code (number before the item), or exit the store by entering 0");
 			try{
 				tryInt = input.nextInt();
-				String rest = input.nextLine();
+				input.nextLine();
 			}
 			catch(InputMismatchException ime){
 				System.out.println("Please either enter the store code of an item, or 0 to exit the store.");
+				again = true;
 				break;
 			}
 			if(tryInt == 0){
 				again = false;
-				confirmed = this.confirmInput("Please confirm that you would like to leave the store, 1 to confirm, anything else to cancel", "You have confirmed that you are leaving the store", "Request to leave the store has been cancelled", "1");
-				if(confirmed == false){
-					again = true;
-				}
+				System.out.println("You have left the store");
 			}else if(tryInt > (foodAvailable.length + toysAvailable.length) || tryInt < 0){
 				System.out.println("Please enter a valid store code");
 			}else{
 				if(tryInt < foodAvailable.length + 1){
 					Food f = foodAvailable[tryInt - 1];
-					confirmed = this.confirmInput(String.format("%s, are you sure you would like to purchase '%s' from the store? Enter 1 to confirm, anything else to cancel", p.getPlayerName(), f.getFoodName()), String.format("You have confirmed the purchase of '%s'", f.getFoodName()), String.format("Your request to purchase '%s' has been cancelled", f.getFoodName()), "1");
-					if(confirmed == true){
-						p.purchaseFood(f);
-					}
+					System.out.println(String.format("%s, you have purchased %s", p.getPlayerName(), f.getFoodName()));
+					p.purchaseFood(f);
+					p.printSummaryInventory();
+					p.printBalance();
 				}else{
 					Toy t = toysAvailable[tryInt - foodAvailable.length - 1];
-					confirmed = this.confirmInput(String.format("%s, are you sure you would like to purchase '%s' from the store? Enter 1 to confirm, anything else to cancel", p.getPlayerName(), t.getToyName()), String.format("You have confirmed the purchase of '%s'", t.getToyName()), String.format("Your request to purchase '%s' has been cancelled", t.getToyName()), "1");
-					if(confirmed == true){
-						p.purchaseToy(t);
-					}
+					System.out.println(String.format("%s, you have purchased %s", p.getPlayerName(), t.getToyName()));
+					p.purchaseToy(t);
+					p.printSummaryInventory();
+					p.printBalance();
 				}
 			}
 		}while(again);
@@ -309,6 +306,58 @@ public class GameEnvironment {
 		this.printStore();
 		this.askForPurchase(p);
 	}
+	
+	public void askForUseInventory(Player p, Pet pet){
+		boolean again = true;
+		int tryInt;
+		do{
+			System.out.println("Select the item in your inventory you would like to use (foods will be eaten, toys will be played with) by entering the number beside the item, or exit inventory by entering 0");
+			try{
+				tryInt = input.nextInt();
+				input.nextLine();
+			}catch(InputMismatchException ime){
+				System.out.println("Please either enter the number beside the item you would like to use, or 0 to exit the inventory");
+				again = true;
+				break;
+			}
+			if(tryInt == 0){
+				again = false;
+				System.out.println("You have left your inventory");
+			}else if(tryInt > (foodAvailable.length + toysAvailable.length) || tryInt < 0){
+				System.out.println("Please enter a valid item code");
+			}else{
+				if(tryInt < foodAvailable.length + 1){
+					Food f = foodAvailable[tryInt - 1];
+					if(p.playersFood.get(f) == 0){
+						again = true;
+						System.out.println(String.format("There are 0 %s in your inventory, please choose a different food", f.getFoodName()));
+					}else{
+						p.removeFromInventory(f);
+						pet.feed(f);
+					}
+				}else{
+					Toy t = toysAvailable[tryInt - foodAvailable.length - 1];
+					if(p.playersToys.get(t) == 0){
+						again = true;
+						System.out.println(String.format("There are 0 %s in your inventory, please choose a different toy", t.getToyName()));
+					}else{
+						p.removeFromInventory(t);
+						pet.play(t);
+					}
+				}
+			}
+		}while(again);
+	}
+	
+	public void goToInventory(Player p, Pet pet){
+		p.printInventory();
+		this.askForUseInventory(p, pet);
+	}
+	
+	public void viewPetStats(Pet pet){
+		pet.viewStats();
+		System.out.println("Enter anything to get back to menu");
+		input.nextLine();
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

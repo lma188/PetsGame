@@ -271,8 +271,6 @@ public class Pet{
 		System.out.println(String.format("Is Misbehaving? %b", this.getIsMisbehaving()));
 		System.out.println(String.format("Is Sick? %b", this.getIsSick()));
 		System.out.println(String.format("Actions used today: %d", this.getActions()));
-		System.out.println("Enter anything to get back to the main menu");
-		String backToMenu = input.nextLine();
 		
 	}
 	
@@ -287,6 +285,7 @@ public class Pet{
 	 * @param foodToBeEaten The food that the pet will eat.
 	 */
 	public void feed(Food foodToBeEaten){
+		this.actions = this.actions + 1;
 		int feedImprovement; 
 		int moodImprovement;
 		int currentHungerLevel = this.getHungerLevel();
@@ -338,6 +337,7 @@ public class Pet{
 	 * @param toyToBePlayed The toy that will be played with.
 	 */
 	public void play(Toy toyToBePlayed){
+		this.actions = this.actions + 1;
 		int playImprovement = 30;
 		int currentMood = this.getMood();
 		int currentPlayLevel = this.getPlayfulLevel();

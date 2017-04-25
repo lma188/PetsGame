@@ -34,6 +34,12 @@ public class Player {
 		PLAYERS_PETS = new Pet[this.getNumPets()];
 		playersToys = new HashMap<Toy, Integer>();
 		playersFood = new HashMap<Food, Integer>();
+		for(Toy t : GameEnvironment.toysAvailable){
+			playersToys.put(t, 0);
+		}
+		for(Food f : GameEnvironment.foodAvailable){
+			playersFood.put(f, 0);
+		}
 	}
 	
 	/**
@@ -82,11 +88,7 @@ public class Player {
 	 */
 	public void purchaseFood(Food foodTBPurchased){
 		Integer i = playersFood.get(foodTBPurchased);
-		if(i == null){
-			playersFood.put(foodTBPurchased, 1);
-		}else{
-			playersFood.put(foodTBPurchased, i + 1);
-		}
+		playersFood.put(foodTBPurchased, i + 1);
 		this.setBalance(this.getBalance() - foodTBPurchased.getFoodPrice());
 	}
 	
@@ -96,11 +98,7 @@ public class Player {
 	 */
 	public void purchaseToy(Toy toyTBPurchased){
 		Integer i = playersToys.get(toyTBPurchased);
-		if(i == null){
-			playersToys.put(toyTBPurchased, 1);
-		}else{
-			playersToys.put(toyTBPurchased, i + 1);
-		}
+		playersToys.put(toyTBPurchased, i + 1);
 		this.balance = this.balance - toyTBPurchased.getToyPrice();
 	}
 	
@@ -108,24 +106,45 @@ public class Player {
 		System.out.println(String.format("%s, your inventory contains:", this.getPlayerName()));
 		System.out.println("Foods:");
 		for(Food f : GameEnvironment.foodAvailable){
-			Integer n = playersToys.get(f);
-			if(n == null){
-				n = 0;
-			}
+			Integer n = playersFood.get(f);
 			System.out.println(String.format("%s x%d", f.getFoodName(), n));
 		}
 		System.out.println("Toys:");
 		for(Toy t : GameEnvironment.toysAvailable){
-			Integer n = playersFood.get(t);
-			if(n == null){
-				n = 0;
-			}
+			Integer n = playersToys.get(t);
 			System.out.println(String.format("%s x%d", t.getToyName(), n));
 		}
 	}
 	
 	public void printBalance(){
 		System.out.println(String.format("%s, your balance is %d coins", this.getPlayerName(), this.getBalance()));
+	}
+	
+	public void printInventory(){
+		System.out.println(String.format("%s, your inventory contains:", this.getPlayerName()));
+		System.out.println("Foods:");
+		int i = 0;
+		for(i = 0; i<GameEnvironment.foodAvailable.length; i++){
+			Food f = GameEnvironment.foodAvailable[i];
+			Integer n = playersFood.get(f);
+			System.out.println(String.format("%d. %s x%d", i+1, f.getFoodName(), n));
+		}
+		System.out.println("Toys:");
+		for(int c = 0; c<GameEnvironment.toysAvailable.length; c++){
+			Toy t = GameEnvironment.toysAvailable[c];
+			Integer n = playersToys.get(t);
+			System.out.println(String.format("%d. %s. x%d", (i + c + 1), t.getToyName(), n));
+		}
+	}
+	
+	public void removeFromInventory(Food f){
+		Integer n = playersFood.get(f);
+		playersFood.put(f, n-1);
+	}
+	
+	public void removeFromInventory(Toy t){
+		Integer n = playersToys.get(t);
+		playersToys.put(t, n-1);
 	}
 	
 	public static void main(String[] args) {
