@@ -122,6 +122,19 @@ public class Species {
 		return ORIGINAL_WEIGHT;
 	}
 	
+	public void printSpeciesStats(){
+		System.out.println(String.format("Species: %s", this.getSpeciesName()));
+		System.out.println(String.format("Favourite Toy: %s", this.getFavToy().getToyName()));
+		System.out.println(String.format("Favourite Food: %s", this.getFavFood().getFoodName()));
+		System.out.println(String.format("Damage done to toy per use: %d points of toy's quality (starts at 100)", this.getDamage()));
+		System.out.println(String.format("Hunger increase per day: %d points of hunger, where hunger is a rating of 0-100", this.getHungerCo()));
+		System.out.println(String.format("Tiredness increase per day: %d points of tiredness, where tiredness is a rating of 0-100", this.getTiredCo()));
+		System.out.println(String.format("Playfulness increase per day: %d points of playfulness, where playfulness is a rating of 0-100", this.getPlayCo()));
+		System.out.println(String.format("Toilet need increase per day: %d points of toilet need, where toilet need is a rating of 0-100", this.getToiletCo()));
+		System.out.println(String.format("Starting weight: %.2f kg", this.getOriginalWeight()));
+		System.out.println();
+	}
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 	}

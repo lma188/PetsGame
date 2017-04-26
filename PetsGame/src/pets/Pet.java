@@ -265,7 +265,7 @@ public class Pet{
 		System.out.println(String.format("Playfulness: %d%%", this.getPlayfulLevel()));
 		System.out.println(String.format("Toilet Need: %d%%", this.getToiletLevel()));
 		System.out.println(String.format("Mood: %d%%", this.getMood()));
-		System.out.println(String.format("Weight: %dkg", this.getWeight()));
+		System.out.println(String.format("Weight: %.2fkg", this.getWeight()));
 		System.out.println(String.format("Species: %s", this.getPetSpecies().getSpeciesName()));
 		System.out.println(String.format("Is Alive? %b", this.getIsAlive()));
 		System.out.println(String.format("Is Misbehaving? %b", this.getIsMisbehaving()));
