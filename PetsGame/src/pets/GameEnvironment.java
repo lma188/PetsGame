@@ -47,7 +47,7 @@ public class GameEnvironment {
 	public final Player[] PLAYER_LIST;
 	public final int NUM_DAYS;
 	public final int NUM_PLAYERS;
-	public final ArrayList<Pet> PET_LIST; 
+	public final ArrayList<Pet> PETS_LIST; 
 	
 	public ArrayList<String> namesList;
 	public static final Scanner input = new Scanner(System.in);
@@ -81,8 +81,10 @@ public class GameEnvironment {
 	
 
 	public GameEnvironment(){
-		NUM_DAYS = this.askNumDays();
 		NUM_PLAYERS = this.askNumPlayers();
+		NUM_DAYS = this.askNumDays();
+		PETS_LIST = new ArrayList<Pet>();
+		namesList = new ArrayList<String>();
 		PLAYER_LIST = this.setUpPlayers();
 	}
 	
@@ -107,8 +109,6 @@ public class GameEnvironment {
 	 * @return Returns the number of days the game will be played for.
 	 */
 	public int getNumDays(){
-		Scanner input = new Scanner(System.in);
-		input.close();
 		return NUM_DAYS;
 		
 	}
@@ -152,7 +152,7 @@ public class GameEnvironment {
 		System.out.println(prompt);
 		String confirmation = input.nextLine();
 		confirmation = confirmation.trim();
-		if(confirmation == confirmValue){
+		if(confirmation.equals(confirmValue)){
 			System.out.println(confirmedMessage);
 			return true;
 		}else{
@@ -170,33 +170,27 @@ public class GameEnvironment {
 	public int askNumPlayers(){
 		int players = 1;
 		while (true){
-		    try
-	        {
-		    	System.out.println("Please enter the number of players you would like to play in the game");
-			    System.out.println("NB: Maximum players is 4. Minmum is 1.");
+		    try{
+		    	System.out.println("Please enter the number of players you would like to use in the game (between 1 and 4)");
 		    	int numPlayers = input.nextInt();
+		    	input.nextLine();
 		        if ( (numPlayers > 4 || numPlayers < 1)) {
 			    	System.out.println("Error: please type a vaild number. NB: Maximum players are 4.");
 			    }else{
-			    	boolean confirmed = confirmInput(String.format("Are you happy to play with %d players in the game?" +'\n' + "Type '1' if you confirm it." +'\n' + "Type antything else to cancell.", numPlayers), 
-			    			String.format("You confirmed you would like to play %d players game.", numPlayers), 
-			    			String.format("You cancelled %d players' game", numPlayers), "1");
+			    	boolean confirmed = confirmInput(String.format("Are you happy to play with %d players in the game? Enter 1 to confirm, anything else to cancel.", numPlayers), 
+			    			String.format("You confirmed you would like to play the game with %d players.", numPlayers), 
+			    			String.format("You cancelled the game of %d players.", numPlayers), "1");
 			        if (confirmed == true) {
-			        	input.close();
 			        	players = numPlayers;
 			        	return players;  
-			        }else{
 			        }
 			    }    	
-	         }
-	         catch(InputMismatchException i)
-	         {
+	         }catch(InputMismatchException i){
 	        	 System.out.println("Please enter a whole number between 1 and 4.");
-	        	 input.next();
 	        	 continue;
 	         }
 		}	
-		}	
+	}	
 	
 	
 	/**
@@ -208,67 +202,103 @@ public class GameEnvironment {
 	public int askNumDays(){
 		int days = 0;	
 		while (true){
-			try
-		       {
-		    	System.out.println("Please enter how many days you would like to play the game for");
-				System.out.println("NB: Please choose a number between 1 to 30.");
+			try{
+		    	System.out.println("Please enter how many days you would like to play the game for (between 1 and 30).");
 				days = input.nextInt();
+				input.nextLine();
 				if (days > 30 || days < 1){
-					System.out.println();
+					System.out.println("Error: please enter the number of days you would like to play between 1 and 30.");
 				}else{
-					       boolean confirmed = confirmInput(String.format("Are you happy to play %d days in the game?" +'\n' + "Type '1' if you confirm it." +'\n' + "Type antything else to cancell.", days), 
-						   String.format("You confirmed you would like to play %d days.", days), 
-						   String.format("You cancelled %d days' game", days), "1");
-						   if (confirmed == true) {
-							   return days;	
-						   }else{
-							   }
-						}		
-				}
-			catch(InputMismatchException i)
-			    {
+			       boolean confirmed = confirmInput(String.format("Are you happy to play %d days in the game? Enter 1 to confirm, anything else to cancel.", days), 
+				   String.format("You confirmed you would like to play for %d days.", days), 
+				   String.format("You cancelled the game of %d days.", days), "1");
+				   if (confirmed == true) {
+					   return days;	
+				   }
+				}		
+			}catch(InputMismatchException i){
 				  System.out.println("Please enter a whole number between 1 and 30.");
-				  input.next();
 				  continue;
-				}
+			}
 		}
 	}
 	
 	
-	public void showSpeciesAvailable(){
-		for(int i=0; i<speciesAvailable.length; i++){
-			Species s = speciesAvailable[i];
-			System.out.println(String.format("%d. Species: %s", i+1, s.getSpeciesName()));
-			System.out.println(String.format("Favourite Toy: %s", s.getFavToy().getToyName()));
-			System.out.println(String.format("Favourite Food: %s", s.getFavFood().getFoodName()));
-			System.out.println(String.format("Damage done to toy per use: %d points of toy's quality (starts at 100)", s.getDamage()));
-			System.out.println(String.format("Hunger increase per day: %d points of hunger, where hunger is a rating of 0-100", s.getHungerCo()));
-			System.out.println(String.format("Tiredness increase per day: %d points of tiredness, where tiredness is a rating of 0-100", s.getTiredCo()));
-			System.out.println(String.format("Playfulness increase per day: %d points of playfulness, where playfulness is a rating of 0-100", s.getPlayCo()));
-			System.out.println(String.format("Toilet need increase per day: %d points of toilet need, where toilet need is a rating of 0-100", s.getToiletCo()));
-			System.out.println(String.format("Starting weight: %d kg", s.getOriginalWeight()));
-		}
-	}
-	
-	public Species askSpecies(String prompt, String errorMessage){
+	public Species chooseSpecies(String prompt, String errorMessage){
 		Species pSpecies = null;
 		boolean again = false;
 		do{
+			System.out.println("The species available to you are:");
+			this.printSpeciesListNum();
 			System.out.println(prompt);
 			String trySpecies = input.nextLine();
 			trySpecies = trySpecies.trim();
-			if(trySpecies == "1" || trySpecies == "2" || trySpecies == "3" || trySpecies == "4" || trySpecies == "5" || trySpecies == "6"){
+			if(trySpecies.equals("0")){
 				again = false;
-				String speciesName = speciesAvailable[Integer.valueOf(trySpecies) - 1].getSpeciesName();
-				boolean confirmed = this.confirmInput(String.format("Please confirm you would like your pet to be of species '%s', type 1 to confirm, anything else to cancel", speciesName), String.format("You have confirmed that you will use the species '%s'", speciesName), String.format("Species choice '%s' has been cancelled", speciesName), "1");
-				if(confirmed == true){
-					pSpecies = speciesAvailable[Integer.valueOf(trySpecies) - 1];
-				}else{
-					again = true;
-				}
+			}else if(trySpecies.equals("1") || trySpecies.equals("2") || trySpecies.equals("3") || trySpecies.equals("4") || trySpecies.equals("5") || trySpecies.equals("6")){
+				again = false;
+				pSpecies = speciesAvailable[Integer.valueOf(trySpecies) - 1];
 			}else{
 				again = true;
 				System.out.println(errorMessage);
+			}
+		}while(again);
+		return pSpecies;
+	}
+	
+	public void printSpeciesListNum(){
+		for(int i = 0; i < speciesAvailable.length; i++){
+			Species s = speciesAvailable[i];
+			System.out.println(String.format("%d. %s", i + 1, s.getSpeciesName()));
+		}
+	}
+	
+	public void printSpeciesList(){
+		for(int i = 0; i < speciesAvailable.length; i++){
+			Species s = speciesAvailable[i];
+			System.out.println(String.format("%s", s.getSpeciesName()));
+		}
+	}
+	
+	public void chooseViewSpeciesStats(){
+		boolean again = true;
+		do{
+			System.out.println("The species available to you are:");
+			this.printSpeciesListNum();
+			System.out.println("Please enter the number beside the species that you would like to view the stats of, or 0 to go back.");
+			String trySpecies = input.nextLine();
+			trySpecies = trySpecies.trim();
+			if(trySpecies.equals("0")){
+				again = false;
+			}else if(trySpecies.equals("1") || trySpecies.equals("2") || trySpecies.equals("3") || trySpecies.equals("4") || trySpecies.equals("5") || trySpecies.equals("6")){
+				again = false;
+				Species pSpecies = speciesAvailable[Integer.valueOf(trySpecies) - 1];
+				pSpecies.printSpeciesStats();
+			}else{
+				again = true;
+				System.out.println("Please enter a valid species number between 1 and 6, or enter 0 to go back.");
+			}
+		}while(again);
+	}
+	
+	public Species speciesStatsOrCon(String pName, int petNum){
+		boolean again = true;
+		Species pSpecies = null;
+		do{
+			System.out.println("The species available to you are:");
+			this.printSpeciesList();
+			System.out.println(String.format("%s, you may view the stats of a species by entering 1, or you may confirm a species for pet %d by entering 2.", pName, petNum));
+			String tryInt = input.nextLine();
+			tryInt = tryInt.trim();
+			if(tryInt.equals("1")){
+				this.chooseViewSpeciesStats();
+				again = true;
+			}else if(tryInt.equals("2")){
+				pSpecies = this.chooseSpecies(String.format("%s, please choose the species of pet %d. Enter the number beside the species you would like to choose, or 0 to go back.", pName, petNum), String.format("%s, you must choose from 1, 2, 3, 4, 5, or 6.", pName));
+				again = false;
+				if(pSpecies == null){
+					again = true;
+				}
 			}
 		}while(again);
 		return pSpecies;
@@ -281,13 +311,11 @@ public class GameEnvironment {
 			int pNumPets = this.askNumPets(String.format("%s, please enter how many pets you would like to use in the game. Must be 1, 2, or 3.", pName), String.format("%s, your number of pets was not valid, you must choose 1, 2, or 3 pets.", pName));
 			players[pNum-1] = new Player(pName, pNumPets, this);
 			for(int petNum = 1; petNum < pNumPets + 1; petNum++){
-				System.out.println("The species available to you are:");
-				this.showSpeciesAvailable();
-				Species pSpecies = this.askSpecies(String.format("%s, please choose the species of pet %d. Enter the number beside the species you would like to choose.", pName, petNum), String.format("%s, you must choose from 1, 2, 3, 4, 5, or 6.", pName));
+				Species pSpecies = this.speciesStatsOrCon(pName, petNum);
 				String petName = this.askName(String.format("%s, please choose a name for your pet of species %s.", pName, pSpecies.getSpeciesName()), String.format("%s, the name you entered has already been used, please choose another", pName));
 				Pet newPet = new Pet(petName, pSpecies);
 				players[pNum-1].PLAYERS_PETS[petNum-1] = newPet;
-				PETS_LIST.add(newPet);
+				this.PETS_LIST.add(newPet);
 			}
 		}
 		return players;
@@ -414,14 +442,9 @@ public class GameEnvironment {
 			System.out.println(prompt);
 			String tryNumPets = input.nextLine();
 			tryNumPets = tryNumPets.trim();
-			if(tryNumPets == "1" || tryNumPets == "2" || tryNumPets == "3"){
+			if(tryNumPets.equals("1")|| tryNumPets.equals("2") || tryNumPets.equals("3")){
 				again = false;
-				boolean confirmation = this.confirmInput(String.format("Please confirm you would like to use %d pets, type 1 to confirm, anything else to cancel", tryNumPets), String.format("You have confirmed you will use %d pets", tryNumPets), String.format("The request to use %d pets in the game has been cancelled", tryNumPets), "1");
-				if(confirmation == true){
-					numPets = Integer.valueOf(tryNumPets);
-				}else{
-					again = true;
-				}
+				numPets = Integer.valueOf(tryNumPets);
 			}else{
 				again = true;
 				System.out.println(errorMessage);
@@ -445,13 +468,8 @@ public class GameEnvironment {
 				System.out.println(errorMessage);
 			}else{
 				again = false;
-				boolean confirmation = this.confirmInput(String.format("Please confirm you would like to use the name %s, type 1 to confirm, anything else to cancel", tryName), String.format("The name '%s' has been confirmed.", tryName), String.format("Name choice '%s' has been cancelled", tryName), "1");
-				if(confirmation == true){
-					name = tryName;
-					namesList.add(name);
-				}else{
-					again = true;
-				}
+				name = tryName;
+				namesList.add(name);
 			}
 		}while(again);
 		return name;
@@ -481,7 +499,8 @@ public class GameEnvironment {
 				System.out.println("2.Tips for having a pet");
 				System.out.println("3.Tips for buying stuff for pet");
 				System.out.println("Please type the number of section you would like to know or anything else to leave.");
-				tryNum = input.nextInt();  
+				tryNum = input.nextInt();
+				input.nextLine();
 				if(tryNum == 1) {
 					BufferedReader r = new BufferedReader(new FileReader("/Users/lucreziaq999/Documents/Game Instruction.txt"));
 					String line = null;
@@ -492,6 +511,7 @@ public class GameEnvironment {
 					System.out.println("");
 					System.out.println("Type 'b' to back help menue or anything else to quit.");
 					tryAny = input.next();
+					input.nextLine();
 					if(tryAny.equals("b")){
 					}else{
 						System.out.println("Good Luck!");
@@ -507,6 +527,7 @@ public class GameEnvironment {
 					System.out.println("");
 					System.out.println("Type 'b' to back help menue or anything else to quit.");
 					tryAny = input.next();
+					input.nextLine();
 					if(tryAny.equals("b")){
 					}else{
 						System.out.println("Good Luck!");
@@ -522,6 +543,7 @@ public class GameEnvironment {
 					System.out.println("");
 					System.out.println("Type 'b' to back help menue or anything else to quit.");
 					tryAny = input.next();
+					input.nextLine();
 					if(tryAny.equals("b")){
 					}else{
 						System.out.println("Good Luck!");
@@ -542,6 +564,7 @@ public class GameEnvironment {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		GameEnvironment game = new GameEnvironment();
 	}
 
 }
