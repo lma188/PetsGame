@@ -234,7 +234,7 @@ public class GameEnvironment {
 	}
 	
 	
-	public void showSpeciesAvailable(){
+	public void showSpeciesAvailable() throws IOException{
 		for(int i=0; i<speciesAvailable.length; i++){
 			Species s = speciesAvailable[i];
 			System.out.println(String.format("%d. Species: %s", i+1, s.getSpeciesName()));
@@ -246,6 +246,12 @@ public class GameEnvironment {
 			System.out.println(String.format("Playfulness increase per day: %d points of playfulness, where playfulness is a rating of 0-100", s.getPlayCo()));
 			System.out.println(String.format("Toilet need increase per day: %d points of toilet need, where toilet need is a rating of 0-100", s.getToiletCo()));
 			System.out.println(String.format("Starting weight: %d kg", s.getOriginalWeight()));
+		}
+		System.out.println("Wanna help for taking care for you pet? Type '1' for help or anything else to move on.");
+		String tryHelp = input.nextLine();
+		tryHelp = tryHelp.trim();
+		if (tryHelp.equals("1")){
+			this.askHelp();
 		}
 	}
 	
@@ -342,11 +348,16 @@ public class GameEnvironment {
 		}while(again);
 	}
 	
-	public void goToStore(Player p){
 		p.printSummaryInventory();
 		p.printBalance();
 		this.printStore();
-		this.askForPurchase(p);
+		System.out.print("Wanna help for buying stuff? Type '1'= Yes or anything else to move on.");
+		String tryHelp = input.nextLine();
+		tryHelp = tryHelp.trim();
+		if(tryHelp.equals("1")){
+			this.askHelp();	
+			}
+		this.askForPurchase(p);	
 	}
 	
 	public void askForUseInventory(Player p, Pet pet){
@@ -396,10 +407,14 @@ public class GameEnvironment {
 		this.askForUseInventory(p, pet);
 	}
 	
-	public void viewPetStats(Pet pet){
+	public void viewPetStats(Pet pet) throws IOException{
 		pet.viewPetStats();
-		System.out.println("Enter anything to get back to menu");
-		input.nextLine();
+		System.out.println("Wanna help for take care of your pet? Enter '1'= Yes, or anything else to get back to menu");
+		String tryHelp = input.nextLine();
+		tryHelp = tryHelp.trim();
+		if(tryHelp.equals("1")){
+			this.askHelp();
+		}
 	}
 	/**
 	 * 
@@ -469,18 +484,19 @@ public class GameEnvironment {
 	 * @param errorMessage The content of error message when player type anything wrong.
 	 */
 	
-	public void askHelp(int tryNum, String tryAny) throws IOException{
-		
+	public void askHelp() throws IOException{
+		int tryNum;
+		String tryAny;
 		while (true) {
 			try{
 				System.out.println("HelpSection");
 				System.out.println("1.Game Instruction");
-				System.out.println("2.Tips for having a pet");
-				System.out.println("3.Tips for buying stuff for pet");
+				System.out.println("2.Tips for taking care of your pets");
+				System.out.println("3.Tips for food and toy");
 				System.out.println("Please type the number of section you would like to know or anything else to leave.");
 				tryNum = input.nextInt();  
 				if(tryNum == 1) {
-					BufferedReader r = new BufferedReader(new FileReader("/Users/lucreziaq999/Documents/Game Instruction.txt"));
+					BufferedReader r = new BufferedReader(new FileReader("Game Instruction.txt"));
 					String line = null;
 					while ((line = r.readLine()) != null) {
 						System.out.println(line);
@@ -495,7 +511,7 @@ public class GameEnvironment {
 						break;
 					}
 			    }else if(tryNum == 2){
-					BufferedReader r = new BufferedReader(new FileReader("/Users/lucreziaq999/Documents/Tips for having a pet.txt"));
+					BufferedReader r = new BufferedReader(new FileReader("Tips for taking care of your pets.txt"));
 					String line = null;
 					while ((line = r.readLine()) != null) {
 						System.out.println(line);
@@ -510,7 +526,7 @@ public class GameEnvironment {
 						break;
 					}
 				}else if(tryNum == 3) {
-					BufferedReader r = new BufferedReader(new FileReader("/Users/lucreziaq999/Documents/Tips for buying stuff for pet.txt"));
+					BufferedReader r = new BufferedReader(new FileReader("Tips for food and toy.txt"));
 					String line = null;
 					while ((line = r.readLine()) != null) {
 						System.out.println(line);
