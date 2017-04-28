@@ -45,10 +45,10 @@ public class Pet{
 	public Pet(String name, Species pet_species){
 		PET_NAME = name;
 		PET_SPECIES = pet_species;
-		hungerLevel = this.getPetSpecies().getHungerCo();
-		tiredLevel = this.getPetSpecies().getTiredCo();
-		playfulLevel = this.getPetSpecies().getPlayCo();
-		toiletLevel = this.getPetSpecies().getToiletCo();
+		hungerLevel = 0;
+		tiredLevel = 0;;
+		playfulLevel = 0;
+		toiletLevel = 0;
 		mood = 50;
 		isAlive = true;
 		weight = this.getPetSpecies().getOriginalWeight();
@@ -271,7 +271,8 @@ public class Pet{
 		System.out.println(String.format("Is Misbehaving? %b", this.getIsMisbehaving()));
 		System.out.println(String.format("Is Sick? %b", this.getIsSick()));
 		System.out.println(String.format("Actions used today: %d", this.getActions()));
-		
+		System.out.println(String.format("Favourite Toy: %s", this.getPetSpecies().getFavToy().getToyName()));
+		System.out.println(String.format("Favourite Food: %s", this.getPetSpecies().getFavFood().getFoodName()));
 	}
 	
 	
@@ -296,15 +297,14 @@ public class Pet{
 		
 		
 		
-		feedImprovement = (int) (foodToBeEaten.getNutritionalValue() * 0.7); 
-		this.setHungerLevel(currentHungerLevel - feedImprovement);
-		
-		
-		if(currentMood == 100){
-			moodImprovement = 0;
+		feedImprovement = (int) (foodToBeEaten.getNutritionalValue() * 0.7);
+		if(currentHungerLevel - feedImprovement <= 0){
+			this.setHungerLevel(0);
 		}else{
-			moodImprovement = (int) (foodToBeEaten.getTastiness() * 0.3)/100;
+			this.setHungerLevel(currentHungerLevel - feedImprovement);
 		}
+		
+		moodImprovement = (int) (foodToBeEaten.getTastiness() * 0.3);
 		if(this.getPetSpecies().getFavFood() == foodToBeEaten){
 			moodImprovement = (int) (moodImprovement * 1.5);	
 		}
@@ -336,7 +336,8 @@ public class Pet{
 	 * Rigorous exercise will make the pet tired and hungry depending on the toy.
 	 * @param toyToBePlayed The toy that will be played with.
 	 */
-	public void play(Toy toyToBePlayed){
+	public boolean play(Toy toyToBePlayed){
+		boolean broken = toyToBePlayed.getIsBroken();
 		this.actions = this.actions + 1;
 		int playImprovement = 30;
 		int currentMood = this.getMood();
@@ -357,10 +358,11 @@ public class Pet{
 			this.setPlayfulLevel(currentPlayLevel - playImprovement);
 		}
 		toyToBePlayed.setToyQuality(currentToyQuality - damageByPet);
+		if(toyToBePlayed.getToyQuality() == 0){
+			toyToBePlayed.setIsBroken(true);
+		}
 		if(toyToBePlayed.getIsBroken() == true){
-			/**
-			 * alert the player if the toy is broken
-			 */
+			broken = true;
 		}
 		if(this.getHungerLevel() + toyToBePlayed.getExerciseRequired() >= 100){
 			this.setHungerLevel(100);
@@ -372,6 +374,7 @@ public class Pet{
 		}else{
 			this.setTiredLevel(this.getTiredLevel() + toyToBePlayed.getExerciseRequired());
 		}
+		return broken;
 	}
 	
 	public void sleep(){
@@ -386,7 +389,7 @@ public class Pet{
 	
 	public void toilet(){
 		this.actions = this.actions + 1;
-		float weightImprovement = (float) (this.getWeight() * 0.2);
+		float weightImprovement = (float) (this.getWeight() * 0.15);
 		int toiletImprovement = (int) (this.getToiletLevel() * 0.75);
 		if(this.getToiletLevel() - toiletImprovement <= 0){
 			this.setToiletLevel(0);
@@ -397,6 +400,33 @@ public class Pet{
 			this.setWeight(0);
 		}else{
 			this.setWeight(this.getWeight() - weightImprovement);
+		}
+	}
+	
+	public void dailyUpdateStats(){
+		if(this.getIsAlive() == true){
+			Species s = this.getPetSpecies();
+			if(this.getHungerLevel() + s.getHungerCo() >= 100){
+				this.setHungerLevel(100);
+			}else{
+				this.setHungerLevel(this.getHungerLevel() + s.getHungerCo());
+			}
+			if(this.getTiredLevel() + s.getTiredCo() >= 100){
+				this.setTiredLevel(100);
+			}else{
+				this.setTiredLevel(this.getTiredLevel() + s.getTiredCo());
+			}
+			if(this.getPlayfulLevel() + s.getPlayCo() >= 100){
+				this.setPlayfulLevel(100);
+			}else{
+				this.setPlayfulLevel(this.getPlayfulLevel() + s.getPlayCo());
+			}
+			if(this.getToiletLevel() + s.getToiletCo() >= 100){
+				this.setToiletLevel(100);
+			}else{
+				this.setToiletLevel(this.getToiletLevel() + s.getToiletCo());
+			}
+			this.setActions(0);
 		}
 	}
 	
