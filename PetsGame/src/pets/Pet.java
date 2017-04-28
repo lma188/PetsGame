@@ -34,6 +34,7 @@ public class Pet{
 	private boolean isSick;
 	public int actions;
 	private boolean beenRevived;
+	public int dailyScore;
 	
 	/**
 	 * The constructor method of Pet.
@@ -56,6 +57,7 @@ public class Pet{
 		isSick = false;
 		actions = 0;
 		beenRevived = false;
+		dailyScore = 0;
 	}
 	
 	/**
@@ -165,6 +167,10 @@ public class Pet{
 		return beenRevived;
 	}
 	
+	public int getDailyScore(){
+		return dailyScore;
+	}
+	
 	/**
 	 * The setter method for the property hungerLevel.
 	 * @param hunger The hunger level that the pet will be set to have, a rating from 0-100.
@@ -258,6 +264,10 @@ public class Pet{
 		}
 	}
 	
+	public void setDailyScore(int score){
+		dailyScore = score;
+	}
+	
 	public void viewPetStats(){
 		System.out.println(String.format("Pet: %s", this.getPetName()));
 		System.out.println(String.format("Hunger: %d%%", this.getHungerLevel()));
@@ -295,8 +305,6 @@ public class Pet{
 		float changingWeight;
 		int currentToiletLevel = this.getToiletLevel();
 		
-		
-		
 		feedImprovement = (int) (foodToBeEaten.getNutritionalValue() * 0.7);
 		if(currentHungerLevel - feedImprovement <= 0){
 			this.setHungerLevel(0);
@@ -306,7 +314,8 @@ public class Pet{
 		
 		moodImprovement = (int) (foodToBeEaten.getTastiness() * 0.3);
 		if(this.getPetSpecies().getFavFood() == foodToBeEaten){
-			moodImprovement = (int) (moodImprovement * 1.5);	
+			moodImprovement = (int) (moodImprovement * 1.5);
+			this.setDailyScore(this.getDailyScore() + 50);
 		}
 		if(currentMood + moodImprovement >= 100){
 			this.setMood(100);
@@ -346,6 +355,7 @@ public class Pet{
 		int damageByPet = this.getPetSpecies().getDamage();
 		if(this.getPetSpecies().getFavToy() == toyToBePlayed){
 			playImprovement = (int) (playImprovement * 1.5);
+			this.setDailyScore(this.getDailyScore() + 50);
 		}
 		if(currentMood + playImprovement >= 100){
 			this.setMood(100);
@@ -427,7 +437,27 @@ public class Pet{
 				this.setToiletLevel(this.getToiletLevel() + s.getToiletCo());
 			}
 			this.setActions(0);
+			this.setDailyScore(0);
 		}
+	}
+	
+	public int calculatePetDailyScore(){
+		if(this.getIsAlive() == false){
+			this.setDailyScore(this.getDailyScore() -100);
+		}else{
+			if(this.getIsMisbehaving() == true){
+				this.setDailyScore(this.getDailyScore() - 100);
+			}
+			if(this.getIsSick() == true){
+				this.setDailyScore(this.getDailyScore() - 100);
+			}
+			this.setDailyScore(this.getDailyScore() + (100 - this.getHungerLevel()));
+			this.setDailyScore(this.getDailyScore() + (100 - this.getTiredLevel()));
+			this.setDailyScore((int) (this.getDailyScore() + ((100 - this.getPlayfulLevel() * 0.5))));
+			this.setDailyScore(this.getDailyScore() + (100 - this.getToiletLevel()));
+			this.setDailyScore(this.getDailyScore() + this.getMood());
+		}
+		return this.getDailyScore();
 	}
 	
 	public static void main(String[] args) {

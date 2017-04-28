@@ -764,6 +764,7 @@ public class GameEnvironment {
 						}
 					}
 				}while(playerDayGoing);
+				p.dailyUpdateScore();
 			}
 		}
 		System.out.println("Thank you for playing!");
@@ -771,7 +772,21 @@ public class GameEnvironment {
 	}
 	
 	public void finishGame(){
-		
+		int[] endScores = new int[NUM_PLAYERS];
+		for(int i = 0; i < PLAYER_LIST.length; i++){
+			Player player = PLAYER_LIST[i];
+			endScores[i] = player.getScore();
+			System.out.println(String.format("%s, your final score is: %d", player.getPlayerName(), player.getScore()));
+		}
+		int max = endScores[0];
+		int maxIndex = 0;
+		for(int i = 0; i<endScores.length; i++){
+			if(endScores[i] > max){
+				max = endScores[i];
+				maxIndex = i;
+			}
+		}
+		*******PLEASE HANDLE PLAYER HAVING SAME SCORE AS ANOTHER*******
 		// add for loop to sum the score
 				
 		

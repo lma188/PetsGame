@@ -21,7 +21,7 @@ public class Player {
 	public HashMap<Toy, Integer> playersToys;
 	public HashMap<Food, Integer> playersFood;
 	public int score;
-	
+
 	/**
 	 * The constructor method initialises the name, balance worked out for the number of pets and the number of days in the game, creates the empty inventory, and an empty list for the player's pets to be stored in.
 	 * @param name The name of the player. Must be unique.
@@ -76,6 +76,13 @@ public class Player {
 		return PLAYERS_PETS;
 	}
 	
+	public int getScore(){
+		return score;
+	}
+	
+	public void setScore(int s){
+		score = s;
+	}
 	/**
 	 * The setter method for the property balance.
 	 * @param bal The value that the player's balance will be set to.
@@ -83,6 +90,7 @@ public class Player {
 	public void setBalance(int bal){
 		balance = bal;
 	}
+
 	
 	/**
 	 * This method purchases food from the store by adding the food to their food inventory, and deducting the price of the food from their balance.
@@ -166,6 +174,14 @@ public class Player {
 	public void removeFromInventory(Toy t){
 		Integer n = playersToys.get(t);
 		playersToys.put(t, n-1);
+	}
+	
+	public void dailyUpdateScore(){
+		int petScore;
+		for(Pet pet : PLAYERS_PETS){
+			petScore = pet.calculatePetDailyScore();
+			this.setScore(this.getScore() + petScore);
+		}
 	}
 	
 	public static void main(String[] args) {
