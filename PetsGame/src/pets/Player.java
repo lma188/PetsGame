@@ -137,6 +137,25 @@ public class Player {
 			Integer n = playersToys.get(t);
 			System.out.println(String.format("%d. %s. x%d", (i + c + 1), t.getToyName(), n));
 		}
+		System.out.println();
+	}
+	
+	public boolean inventoryEmpty(){
+		boolean empty = true;
+		Integer n = 0;
+		for(int i=0; i<GameEnvironment.foodAvailable.length; i++){
+			n = playersFood.get(GameEnvironment.foodAvailable[i]);
+			if(n != 0){
+				empty = false;
+			}
+		}
+		for(int i=0; i<GameEnvironment.toysAvailable.length; i++){
+			n = playersToys.get(GameEnvironment.toysAvailable[i]);
+			if(n != 0){
+				empty = false;
+			}
+		}
+		return empty;
 	}
 	
 	public void removeFromInventory(Food f){

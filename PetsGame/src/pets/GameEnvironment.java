@@ -6,6 +6,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.String;
+import java.util.Random;
+import java.util.Iterator;
 
 /**
  * The GameEnvironment class is the main class that runs the game.
@@ -51,6 +53,7 @@ public class GameEnvironment {
 	
 	public ArrayList<String> namesList;
 	public static final Scanner input = new Scanner(System.in);
+	public static Random randomObject = new Random();
 	
 	
 	public static final Food PIZZA = new Food("Pizza", 40, 90, 70);
@@ -110,7 +113,6 @@ public class GameEnvironment {
 	 */
 	public int getNumDays(){
 		return NUM_DAYS;
-		
 	}
 	
 	/**
@@ -186,6 +188,7 @@ public class GameEnvironment {
 			        }
 			    }    	
 	         }catch(InputMismatchException i){
+	        	 input.nextLine();
 	        	 System.out.println("Please enter a whole number between 1 and 4.");
 	        	 continue;
 	         }
@@ -217,6 +220,7 @@ public class GameEnvironment {
 				   }
 				}		
 			}catch(InputMismatchException i){
+				input.nextLine();
 				  System.out.println("Please enter a whole number between 1 and 30.");
 				  continue;
 			}
@@ -346,6 +350,7 @@ public class GameEnvironment {
 				input.nextLine();
 			}
 			catch(InputMismatchException ime){
+				input.nextLine();
 				System.out.println("Please either enter the store code of an item, or 0 to exit the store.");
 				again = true;
 				break;
@@ -358,16 +363,26 @@ public class GameEnvironment {
 			}else{
 				if(tryInt < foodAvailable.length + 1){
 					Food f = foodAvailable[tryInt - 1];
-					System.out.println(String.format("%s, you have purchased %s", p.getPlayerName(), f.getFoodName()));
-					p.purchaseFood(f);
-					p.printSummaryInventory();
-					p.printBalance();
+					if(p.getBalance() - f.getFoodPrice() < 0){
+						System.out.println("You do not have sufficient funds to make this purchase.");
+					}else{
+						System.out.println(String.format("%s, you have purchased %s", p.getPlayerName(), f.getFoodName()));
+						p.purchaseFood(f);
+						p.printSummaryInventory();
+						p.printBalance();
+					}
+					this.printStore();
 				}else{
 					Toy t = toysAvailable[tryInt - foodAvailable.length - 1];
-					System.out.println(String.format("%s, you have purchased %s", p.getPlayerName(), t.getToyName()));
-					p.purchaseToy(t);
-					p.printSummaryInventory();
-					p.printBalance();
+					if(p.getBalance() - t.getToyPrice() < 0){
+						System.out.println("You do not have sufficient funds to make this purchase.");
+					}else{
+						System.out.println(String.format("%s, you have purchased %s", p.getPlayerName(), t.getToyName()));
+						p.purchaseToy(t);
+						p.printSummaryInventory();
+						p.printBalance();
+					}
+					this.printStore();
 				}
 			}
 		}while(again);
@@ -380,52 +395,73 @@ public class GameEnvironment {
 		this.askForPurchase(p);
 	}
 	
-	public void askForUseInventory(Player p, Pet pet){
+	public void goToInventory(Player p, Pet pet){
 		boolean again = true;
+		boolean broken = false;
 		int tryInt;
 		do{
-			System.out.println("Select the item in your inventory you would like to use (foods will be eaten, toys will be played with) by entering the number beside the item, or exit inventory by entering 0");
-			try{
-				tryInt = input.nextInt();
-				input.nextLine();
-			}catch(InputMismatchException ime){
-				System.out.println("Please either enter the number beside the item you would like to use, or 0 to exit the inventory");
-				again = true;
-				break;
-			}
-			if(tryInt == 0){
-				again = false;
-				System.out.println("You have left your inventory");
-			}else if(tryInt > (foodAvailable.length + toysAvailable.length) || tryInt < 0){
-				System.out.println("Please enter a valid item code");
-			}else{
-				if(tryInt < foodAvailable.length + 1){
-					Food f = foodAvailable[tryInt - 1];
-					if(p.playersFood.get(f) == 0){
-						again = true;
-						System.out.println(String.format("There are 0 %s in your inventory, please choose a different food", f.getFoodName()));
-					}else{
-						p.removeFromInventory(f);
-						pet.feed(f);
-					}
+			p.printInventory();
+			if(p.inventoryEmpty() == false){
+				System.out.println("Select the item in your inventory you would like to use [counts as action] (foods will be eaten, toys will be played with) by entering the number beside the item, or exit inventory by entering 0");
+				try{
+					tryInt = input.nextInt();
+					input.nextLine();
+				}catch(InputMismatchException ime){
+					input.nextLine();
+					System.out.println("Please either enter the number beside the item you would like to use, or 0 to exit the inventory");
+					again = true;
+					break;
+				}
+				if(tryInt == 0){
+					again = false;
+					System.out.println("You have left your inventory");
+				}else if(tryInt > (foodAvailable.length + toysAvailable.length) || tryInt < 0){
+					System.out.println("Please enter a valid item code");
 				}else{
-					Toy t = toysAvailable[tryInt - foodAvailable.length - 1];
-					if(p.playersToys.get(t) == 0){
-						again = true;
-						System.out.println(String.format("There are 0 %s in your inventory, please choose a different toy", t.getToyName()));
+					if(tryInt < foodAvailable.length + 1){
+						Food f = foodAvailable[tryInt - 1];
+						if(p.playersFood.get(f) == 0){
+							again = true;
+							System.out.println(String.format("There are 0 %s in your inventory, please choose a different food", f.getFoodName()));
+						}else{
+							p.removeFromInventory(f);
+							pet.feed(f);
+							System.out.println(String.format("%s, your pet %s has been fed %s. Updated stats:", p.getPlayerName(), pet.getPetName(), f.getFoodName()));
+							System.out.println(String.format("Hunger Level: %d", pet.getHungerLevel()));
+							System.out.println(String.format("Mood: %d", pet.getMood()));
+							System.out.println(String.format("Weight: %.2f", pet.getWeight()));
+							System.out.println(String.format("Toilet Need: %d", pet.getToiletLevel()));
+							System.out.println(String.format("Actions: %d", pet.getActions()));
+						}
 					}else{
-						p.removeFromInventory(t);
-						pet.play(t);
+						Toy t = toysAvailable[tryInt - foodAvailable.length - 1];
+						if(p.playersToys.get(t) == 0){
+							again = true;
+							System.out.println(String.format("There are 0 %s in your inventory, please choose a different toy", t.getToyName()));
+						}else{
+							broken = pet.play(t);
+							if(broken){
+								p.removeFromInventory(t);
+								System.out.println(String.format("%s has broken, and has been removed from your inventory", t.getToyName()));
+							}else{
+								System.out.println(String.format("The current quality of %s is %d/100", t.getToyName(), t.getToyQuality()));
+							}
+							System.out.println(String.format("%s, your pet %s has played with %s. Updated stats:", p.getPlayerName(), pet.getPetName(), t.getToyName()));
+							System.out.println(String.format("Mood: %d", pet.getMood()));
+							System.out.println(String.format("Playfulness: %d", pet.getPlayfulLevel()));
+							System.out.println(String.format("Hunger: %d", pet.getHungerLevel()));
+							System.out.println(String.format("Tiredness: %d", pet.getTiredLevel()));
+							
+						}
 					}
 				}
+			}else{
+				System.out.println(String.format("%s, you do not have any items in your inventory that you can use, so you are being redirected to the previous menu", p.getPlayerName()));
+				again = false;
 			}
 		}while(again);
 	}
-	
-	public void goToInventory(Player p, Pet pet){
-		p.printInventory();
-		this.askForUseInventory(p, pet);
-	}
+
 	
 	public void viewPetStats(Pet pet){
 		pet.viewPetStats();
@@ -475,6 +511,258 @@ public class GameEnvironment {
 		return name;
 	}
 	
+	public boolean payForTreatment(Pet pet, Player player){
+		boolean again = true;
+		boolean paying = false;
+		int treatmentCost = 150;
+		do{
+			System.out.println(String.format("%s, your pet %s is sick", player.getPlayerName(), pet.getPetName()));
+			System.out.println(String.format("You have the option of paying for treatment for %s, which will make %s better, and give them a boost in happiness.", pet.getPetName(), pet.getPetName()));
+			System.out.println(String.format("Your current balance is %d coins", player.getBalance()));
+			System.out.println(String.format("If you do not treat %s, then they will remain sick. Enter 1 to pay for treatment for %s, which costs %d coins, or 2 to skip treatment", pet.getPetName(), pet.getPetName(), treatmentCost));
+			String tryTreatment = input.nextLine();
+			tryTreatment = tryTreatment.trim();
+			if(tryTreatment.equals("1")){
+				if(player.getBalance() - treatmentCost < 0){
+					paying = false;
+					again = false;
+					System.out.println(String.format("%s, you do not have enough coins to pay for treatment, so %s will remain sick", player.getPlayerName(), pet.getPetName()));
+				}else{
+					player.setBalance(player.getBalance() - treatmentCost);
+					paying = true;
+					again = false;
+					System.out.println(String.format("%s, you have chosen to treat %s, so they are not longer sick", player.getPlayerName(), pet.getPetName()));
+				}
+			}else if(tryTreatment.equals("2")){
+				paying = false;
+				again = false;
+				System.out.println(String.format("%s, you have chosen not to treat %s, so they will remain sick", player.getPlayerName(), pet.getPetName()));
+			}else{
+				again = true;
+				System.out.println("Error: your input is invalid. Please enter '1' or '2'.");
+			}
+		}while(again);
+		return paying;
+	}
+	
+	public void makePetSick(Pet pet, Player player){
+		int happinessImprovement = 30;
+		if(pet.getIsSick() == false){
+			if(pet.getIsAlive() == true){
+				boolean paying = this.payForTreatment(pet, player);
+				if(paying == true){
+					if(pet.getMood() + happinessImprovement >= 100){
+						pet.setMood(100);
+					}else{
+						pet.setMood(pet.getMood() + happinessImprovement);
+					}
+					System.out.println(String.format("%s, your pet %s now has mood: %d", player.getPlayerName(), pet.getPetName(), pet.getMood()));
+					pet.setIsSick(false);
+				}else{
+					pet.setIsSick(true);
+				}
+			}
+		}
+	}
+	
+	public boolean punishPet(Pet pet, Player player){
+		boolean again = true;
+		boolean punishing = false;
+		do{
+			System.out.println(String.format("%s, your pet %s is misbehaving", player.getPlayerName(), pet.getPetName()));
+			System.out.println(String.format("If you punish %s, they will stop misbehaving and will make them sadder. If you do not punish %s they will continue misbehaving. Enter 1 to punish %s, or 2 to skip punishment", pet.getPetName(), pet.getPetName(), pet.getPetName()));
+			String tryPunish = input.nextLine();
+			tryPunish = tryPunish.trim();
+			if(tryPunish.equals("1")){
+				punishing = true;
+				again = false;
+				System.out.println(String.format("%s, you have chosen to punish %s, so they are no longer misbehaving", player.getPlayerName(), pet.getPetName()));
+			}else if(tryPunish.equals("2")){
+				punishing = false;
+				again = false;
+				System.out.println(String.format("%s, you have chosen not to punish %s, so they will continue misbehaving", player.getPlayerName(), pet.getPetName()));
+			}else{
+				again = true;
+				System.out.println("Error: your input is invalid. Please enter '1' or '2'.");
+			}
+		}while(again);
+		return punishing;
+	}
+	
+	public void makePetMisbehave(Pet pet, Player player){
+		int happinessDecrease = 30;
+		if(pet.getIsMisbehaving() == false){
+			if(pet.getIsMisbehaving() == false){
+				boolean punishing = this.punishPet(pet, player);
+				if(punishing == true){
+					if(pet.getMood() - happinessDecrease <= 0){
+						pet.setMood(0);
+					}else{
+						pet.setMood(pet.getMood() - happinessDecrease);
+					}
+					System.out.println(String.format("%s, your pet %s now has mood: %d", player.getPlayerName(), pet.getPetName(), pet.getMood()));
+					pet.setIsMisbehaving(false);
+				}else{
+					pet.setIsMisbehaving(true);
+				}
+			}
+		}
+	}
+	
+	public void randomEventPicker(Player p, Pet pet){
+		int rand = GameEnvironment.randomObject.nextInt(15);
+		if(rand == 0){
+			this.makePetSick(pet, p);
+		}
+		rand = GameEnvironment.randomObject.nextInt(15);
+		if(rand == 0){
+			this.makePetMisbehave(pet, p);
+		}
+	}
+	
+	public Pet printListPetChoices(ArrayList<Pet> todayPets, Player p){
+		boolean again = true;
+		Pet chosenPet = null;
+		int tryChoice;
+		do{
+			System.out.println(String.format("%s, your pet choices available for interaction today:", p.getPlayerName()));
+			for(int i=0; i<todayPets.size(); i++){
+				System.out.println(String.format("%d. %s", i+1, todayPets.get(i).getPetName()));
+			}
+			System.out.println(String.format("%s, please enter the number beside which pet you would like to use today, or enter 0 to finish your day", p.getPlayerName()));
+			try{
+				tryChoice = input.nextInt();
+				input.nextLine();
+			}catch(InputMismatchException ime){
+				input.nextLine();
+				System.out.println("Error: please enter either the number beside the pet you would like to use, or 0 to finish your day");
+				again = true;
+				break;
+			}
+			if(tryChoice == 0){
+				chosenPet = null;
+				again = false;
+			}else if(tryChoice > 0 && tryChoice <= p.getNumPets()){
+				chosenPet = todayPets.get(tryChoice - 1);
+				again = false;
+			}else{
+				System.out.println("Error: please enter either the number beside the pet you would like to use, or 0 to finish your day");
+				again = true;
+			}
+		}while(again);
+		return chosenPet;
+	}
+	
+	public int givePetOptions(Player p, Pet pet){
+		boolean again = true;
+		int choice = 0;
+		int tryChoice;
+		do{
+			System.out.println(String.format("%s, your current pet is %s. %s has perfromed %d/2 of their actions for the day. Your options for today are:", p.getPlayerName(), pet.getPetName(), pet.getPetName(), pet.getActions()));
+			System.out.println("0. Go back to pet choice");
+			System.out.println("1. View Pet Stats");
+			System.out.println("2. Go to Store");
+			System.out.println("3. Go to your Inventory");
+			System.out.println("4. Put your pet to sleep [action]");
+			System.out.println("5. Let your pet visit the bathroom [action]");
+			System.out.println("6. Skip the rest of this pet's actions for the day");
+			System.out.println("7. Skip the rest of your day (all pets)");
+			try{
+				tryChoice = input.nextInt();
+				input.nextLine();
+			}catch(InputMismatchException ime){
+				input.nextLine();
+				System.out.println("Error: please enter the number beside the option you would like to choose. Whole number between 0 and 6.");
+				again = true;
+				break;
+			}
+			if(tryChoice < 0 || tryChoice > 7){
+				System.out.println("Error: please enter the number beside the option you would like to choose. Whole number between 0 and 6.");
+				again = true;
+			}else{
+				choice = tryChoice;
+				again = false;
+			}
+		}while(again);
+		return choice;
+	}
+	
+	public void playGame(){
+		boolean playerDayGoing = true;
+		boolean petDayGoing = true;
+		for(int day = 1; day < NUM_DAYS+1; day++){
+			System.out.println("===================================");
+			System.out.println(String.format("         DAY %d", day));
+			System.out.println("===================================");
+			for(Player p : PLAYER_LIST){
+				playerDayGoing = true;
+				ArrayList<Pet> todayPets = new ArrayList<Pet>();
+				for(Pet pet : p.PLAYERS_PETS){
+					pet.dailyUpdateStats();
+					this.randomEventPicker(p, pet);
+					if(pet.getIsAlive() == true){
+						todayPets.add(pet);
+					}
+				}
+				do{
+					for(Iterator<Pet> it = todayPets.iterator(); it.hasNext();){
+						if(it.next().getActions() >= 2){
+							it.remove();
+						}
+					}
+					if(todayPets.size() == 0){
+						System.out.println(String.format("%s, you do not have any remaining actions to perform on any pets today, so it is the end of day %d for you.", p.getPlayerName(), day));
+						playerDayGoing = false;
+					}else{
+						Pet chosen = this.printListPetChoices(todayPets, p);
+						if(chosen == null){
+							playerDayGoing = false;
+						}else{
+							petDayGoing = true;
+							do{
+								if(chosen.getActions() >= 2){
+									System.out.println(String.format("Sorry %s, your pet %s has run out of actions for the day.", p.getPlayerName(), chosen.getPetName()));
+									petDayGoing = false;
+								}else{
+									int choice = this.givePetOptions(p, chosen);
+									if(choice == 0){
+										break;
+									}else if(choice == 1){
+										this.viewPetStats(chosen);
+									}else if(choice == 2){
+										this.goToStore(p);
+									}else if(choice == 3){
+										this.goToInventory(p, chosen);
+									}else if(choice == 4){
+										chosen.sleep();
+										System.out.println(String.format("%s, %s went to sleep. Their updated stats are:", p.getPlayerName(), chosen.getPetName()));
+										System.out.println(String.format("Tiredness: %d", chosen.getTiredLevel()));
+										System.out.println(String.format("Actions: %d", chosen.getActions()));
+									}else if(choice == 5){
+										chosen.toilet();
+										System.out.println(String.format("%s, %s went to the bathroom. Their updated stats are:", p.getPlayerName(), chosen.getPetName()));
+										System.out.println(String.format("Toilet Need: %d", chosen.getToiletLevel()));
+										System.out.println(String.format("Weight: %.2f", chosen.getWeight()));
+										System.out.println(String.format("Actions: %d", chosen.getActions()));
+									}else if(choice == 6){
+										System.out.println(String.format("%s has no remaining actions for the day.", chosen.getPetName()));
+										chosen.setActions(2);
+										petDayGoing = false;
+									}else if(choice == 7){
+										System.out.println(String.format("%s, you have finished day %d", p.getPlayerName(), day));
+										petDayGoing = false;
+										playerDayGoing = false;
+									}
+								}
+							}while(petDayGoing);
+						}
+					}
+				}while(playerDayGoing);
+			}
+		}
+		System.out.println("Thank you for playing!");
+		this.finishGame();
+	}
 	
 	public void finishGame(){
 		
@@ -556,6 +844,7 @@ public class GameEnvironment {
 		}
 		catch(InputMismatchException i)
 	         {
+				 input.nextLine();
 	        	 System.out.println("Good Luck");
 	        	 break;
 	         }		
@@ -565,6 +854,7 @@ public class GameEnvironment {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		GameEnvironment game = new GameEnvironment();
+		game.playGame();
 	}
 
 }
