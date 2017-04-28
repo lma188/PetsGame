@@ -271,7 +271,8 @@ public class Pet{
 		System.out.println(String.format("Is Misbehaving? %b", this.getIsMisbehaving()));
 		System.out.println(String.format("Is Sick? %b", this.getIsSick()));
 		System.out.println(String.format("Actions used today: %d", this.getActions()));
-		
+		System.out.println(String.format("Favourite Toy: %s", this.getPetSpecies().getFavToy().getToyName()));
+		System.out.println(String.format("Favourite Food: %s", this.getPetSpecies().getFavFood().getFoodName()));
 	}
 	
 	
@@ -296,15 +297,14 @@ public class Pet{
 		
 		
 		
-		feedImprovement = (int) (foodToBeEaten.getNutritionalValue() * 0.7); 
-		this.setHungerLevel(currentHungerLevel - feedImprovement);
-		
-		
-		if(currentMood == 100){
-			moodImprovement = 0;
+		feedImprovement = (int) (foodToBeEaten.getNutritionalValue() * 0.7);
+		if(currentHungerLevel - feedImprovement <= 0){
+			this.setHungerLevel(0);
 		}else{
-			moodImprovement = (int) (foodToBeEaten.getTastiness() * 0.3)/100;
+			this.setHungerLevel(currentHungerLevel - feedImprovement);
 		}
+		
+		moodImprovement = (int) (foodToBeEaten.getTastiness() * 0.3);
 		if(this.getPetSpecies().getFavFood() == foodToBeEaten){
 			moodImprovement = (int) (moodImprovement * 1.5);	
 		}
@@ -389,7 +389,7 @@ public class Pet{
 	
 	public void toilet(){
 		this.actions = this.actions + 1;
-		float weightImprovement = (float) (this.getWeight() * 0.2);
+		float weightImprovement = (float) (this.getWeight() * 0.15);
 		int toiletImprovement = (int) (this.getToiletLevel() * 0.75);
 		if(this.getToiletLevel() - toiletImprovement <= 0){
 			this.setToiletLevel(0);
