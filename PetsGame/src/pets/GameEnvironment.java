@@ -83,7 +83,7 @@ public class GameEnvironment {
 	public static final Species[] speciesAvailable = {DOG, CAT, BIRD, SNAKE, LION, PANDA};
 	
 
-	public GameEnvironment(){
+	public GameEnvironment() throws IOException{
 		NUM_PLAYERS = this.askNumPlayers();
 		NUM_DAYS = this.askNumDays();
 		PETS_LIST = new ArrayList<Pet>();
@@ -168,16 +168,19 @@ public class GameEnvironment {
 	 * Maximum players is 4 and minimum require is 1.
 	 * Screen will display error message if the input out of range or type in other things.
 	 * @return Return how many players will play the game together. 
+	 * @throws IOException 
 	 */
-	public int askNumPlayers(){
+	public int askNumPlayers() throws IOException{
 		int players = 1;
 		while (true){
 		    try{
-		    	System.out.println("Please enter the number of players you would like to use in the game (between 1 and 4)");
+		    	System.out.println("Please enter the number of players you would like to use in the game (between 1 and 4), or enter 0 to view the rules of the game.");
 		    	int numPlayers = input.nextInt();
 		    	input.nextLine();
-		        if ( (numPlayers > 4 || numPlayers < 1)) {
+		        if ( (numPlayers > 4 || numPlayers < 0)) {
 			    	System.out.println("Error: please type a vaild number. NB: Maximum players are 4.");
+			    }else if(numPlayers == 0){
+			    	this.askHelp();
 			    }else{
 			    	boolean confirmed = confirmInput(String.format("Are you happy to play with %d players in the game? Enter 1 to confirm, anything else to cancel.", numPlayers), 
 			    			String.format("You confirmed you would like to play the game with %d players.", numPlayers), 
@@ -201,16 +204,19 @@ public class GameEnvironment {
 	 * The range of days from 1-30.
 	 * It will display error message if player types number out of the range or anything else.
 	 * @return Return the number of days which players want to play in the game.
+	 * @throws IOException 
 	 */
-	public int askNumDays(){
+	public int askNumDays() throws IOException{
 		int days = 0;	
 		while (true){
 			try{
-		    	System.out.println("Please enter how many days you would like to play the game for (between 1 and 30).");
+		    	System.out.println("Please enter how many days you would like to play the game for (between 1 and 30), or enter 0 to view the rules of the game.");
 				days = input.nextInt();
 				input.nextLine();
-				if (days > 30 || days < 1){
+				if (days > 30 || days < 0){
 					System.out.println("Error: please enter the number of days you would like to play between 1 and 30.");
+				}else if(days == 0){
+					this.askHelp();
 				}else{
 			       boolean confirmed = confirmInput(String.format("Are you happy to play %d days in the game? Enter 1 to confirm, anything else to cancel.", days), 
 				   String.format("You confirmed you would like to play for %d days.", days), 
@@ -778,19 +784,21 @@ public class GameEnvironment {
 	 * @param errorMessage The content of error message when player type anything wrong.
 	 */
 	
-	public void askHelp(int tryNum, String tryAny) throws IOException{
+	public void askHelp() throws IOException{
 		
 		while (true) {
+			int tryNum = 0;
+			String tryAny;
 			try{
 				System.out.println("HelpSection");
 				System.out.println("1.Game Instruction");
-				System.out.println("2.Tips for having a pet");
-				System.out.println("3.Tips for buying stuff for pet");
+				System.out.println("2.Tips for taking care of your pets");
+				System.out.println("3.Tips for food and toy");
 				System.out.println("Please type the number of section you would like to know or anything else to leave.");
 				tryNum = input.nextInt();
 				input.nextLine();
 				if(tryNum == 1) {
-					BufferedReader r = new BufferedReader(new FileReader("/Users/lucreziaq999/Documents/Game Instruction.txt"));
+					BufferedReader r = new BufferedReader(new FileReader("Game Instruction.txt"));
 					String line = null;
 					while ((line = r.readLine()) != null) {
 						System.out.println(line);
@@ -806,7 +814,7 @@ public class GameEnvironment {
 						break;
 					}
 			    }else if(tryNum == 2){
-					BufferedReader r = new BufferedReader(new FileReader("/Users/lucreziaq999/Documents/Tips for having a pet.txt"));
+			    	BufferedReader r = new BufferedReader(new FileReader("Tips for taking care of your pets.txt"));
 					String line = null;
 					while ((line = r.readLine()) != null) {
 						System.out.println(line);
@@ -822,7 +830,7 @@ public class GameEnvironment {
 						break;
 					}
 				}else if(tryNum == 3) {
-					BufferedReader r = new BufferedReader(new FileReader("/Users/lucreziaq999/Documents/Tips for buying stuff for pet.txt"));
+					BufferedReader r = new BufferedReader(new FileReader("Tips for food and toy.txt"));
 					String line = null;
 					while ((line = r.readLine()) != null) {
 						System.out.println(line);
@@ -851,7 +859,7 @@ public class GameEnvironment {
 		}	
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		GameEnvironment game = new GameEnvironment();
 		game.playGame();
