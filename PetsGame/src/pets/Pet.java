@@ -460,6 +460,31 @@ public class Pet{
 		return this.getDailyScore();
 	}
 	
+	public boolean shouldPetBeDead(){
+		/* if any of the levels (hunger, tired, toilet, or mood) are 100 (or 0 for mood), then dead, else if 2 are over 80 */
+		if(this.getHungerLevel() == 100 || this.getTiredLevel() == 100 || this.getToiletLevel() == 100 || this.getMood() == 0){
+			return true;
+		}else{
+			int count = 0;
+			if(this.getHungerLevel() > 80){
+				count += 1;
+			}
+			if(this.getTiredLevel() > 80){
+				count += 1;
+			}
+			if(this.getToiletLevel() > 80){
+				count += 1;
+			}
+			if(this.getMood() < 20){
+				count += 1;
+			}
+			if(count >= 2){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
