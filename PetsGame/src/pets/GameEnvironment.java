@@ -210,7 +210,7 @@ public class GameEnvironment {
 		int days = 0;	
 		while (true){
 			try{
-		    	System.out.println("Please enter how many days you would like to play the game for (between 1 and 30), or enter 0 to view the rules of the game.");
+		    	System.out.println("Please enter how many days (rounds) you would like to play the game for (between 1 and 30), or enter 0 to view the rules of the game. Each day, each pet is able to perfrom two 'actions'");
 				days = input.nextInt();
 				input.nextLine();
 				if (days > 30 || days < 0){
@@ -371,6 +371,8 @@ public class GameEnvironment {
 					Food f = foodAvailable[tryInt - 1];
 					if(p.getBalance() - f.getFoodPrice() < 0){
 						System.out.println("You do not have sufficient funds to make this purchase.");
+						p.printSummaryInventory();
+						p.printBalance();
 					}else{
 						System.out.println(String.format("%s, you have purchased %s", p.getPlayerName(), f.getFoodName()));
 						p.purchaseFood(f);
@@ -382,6 +384,8 @@ public class GameEnvironment {
 					Toy t = toysAvailable[tryInt - foodAvailable.length - 1];
 					if(p.getBalance() - t.getToyPrice() < 0){
 						System.out.println("You do not have sufficient funds to make this purchase.");
+						p.printSummaryInventory();
+						p.printBalance();
 					}else{
 						System.out.println(String.format("%s, you have purchased %s", p.getPlayerName(), t.getToyName()));
 						p.purchaseToy(t);
@@ -633,7 +637,7 @@ public class GameEnvironment {
 		do{
 			System.out.println(String.format("%s, your pet choices available for interaction today:", p.getPlayerName()));
 			for(int i=0; i<todayPets.size(); i++){
-				System.out.println(String.format("%d. %s", i+1, todayPets.get(i).getPetName()));
+				System.out.println(String.format("%d. %s (%s)", i+1, todayPets.get(i).getPetName(), todayPets.get(i).getPetSpecies().getSpeciesName()));
 			}
 			System.out.println(String.format("%s, please enter the number beside which pet you would like to use today, or enter 0 to finish your day", p.getPlayerName()));
 			try{
@@ -693,6 +697,50 @@ public class GameEnvironment {
 		return choice;
 	}
 	
+	public boolean willRevivePet(Pet pet, Player player){
+		boolean again = true;
+		boolean reviving = false;
+		do{
+			System.out.println(String.format("%s, your pet %s has died as their stats have fallen too low.", player.getPlayerName(), pet.getPetName()));
+			System.out.println(String.format("You have the option to revive your pet from death (this can only be done once in their lifetime). To revive your pet, enter 1, to continue without reviving them, enter 2."));
+			String tryRevive = input.nextLine();
+			tryRevive = tryRevive.trim();
+			if(tryRevive.equals("1")){
+				reviving = true;
+				again = false;
+				System.out.println(String.format("%s, your pet %s has been revived from death.", player.getPlayerName(), pet.getPetName()));
+			}else if(tryRevive.equals("2")){
+				reviving = false;
+				again = false;
+				System.out.println(String.format("%s, you have chosen not to revive %s, so they are dead, and will remain dead for the rest of the game.", player.getPlayerName(), pet.getPetName()));
+			}else{
+				again = true;
+				System.out.println("Error: your input is invalid. Please enter '1' or '2'");
+			}
+		}while(again);
+		return reviving;
+	}
+	
+	public void updatePetAliveStats(Player player){
+		boolean shouldBeDead = false;
+		for(Pet pet : player.PLAYERS_PETS){
+			shouldBeDead = false;
+			shouldBeDead = pet.shouldPetBeDead();
+			if(shouldBeDead && pet.getIsAlive()){
+				pet.setIsAlive(false);
+				if(pet.getBeenRevived() == true){
+					System.out.println(String.format("%s, your pet %s has died. %s has been revived once before, and cannot be revived again, so will remain dead for the rest of the game.", player.getPlayerName(), pet.getPetName(), pet.getPetName()));
+				}else{
+					boolean reviving = this.willRevivePet(pet, player);
+					if(reviving == true){
+						pet.setIsAlive(true);
+						pet.setBeenRevived(true);
+					}
+				}
+			}
+		}
+	}
+	
 	public void playGame(){
 		boolean playerDayGoing = true;
 		boolean petDayGoing = true;
@@ -704,10 +752,10 @@ public class GameEnvironment {
 				playerDayGoing = true;
 				ArrayList<Pet> todayPets = new ArrayList<Pet>();
 				for(Pet pet : p.PLAYERS_PETS){
-					pet.dailyUpdateStats();
-					this.randomEventPicker(p, pet);
 					if(pet.getIsAlive() == true){
+						pet.dailyUpdateStats();
 						todayPets.add(pet);
+						this.randomEventPicker(p, pet);
 					}
 				}
 				do{
@@ -764,32 +812,23 @@ public class GameEnvironment {
 						}
 					}
 				}while(playerDayGoing);
+				/* figure out if any of the pets should die */
+				this.updatePetAliveStats(p);
 				p.dailyUpdateScore();
 			}
 		}
-		System.out.println("Thank you for playing!");
 		this.finishGame();
 	}
 	
 	public void finishGame(){
+		System.out.println("Thank you for playing!");
+		System.out.println("Final Scores:");
 		int[] endScores = new int[NUM_PLAYERS];
 		for(int i = 0; i < PLAYER_LIST.length; i++){
 			Player player = PLAYER_LIST[i];
 			endScores[i] = player.getScore();
 			System.out.println(String.format("%s, your final score is: %d", player.getPlayerName(), player.getScore()));
 		}
-		int max = endScores[0];
-		int maxIndex = 0;
-		for(int i = 0; i<endScores.length; i++){
-			if(endScores[i] > max){
-				max = endScores[i];
-				maxIndex = i;
-			}
-		}
-		*******PLEASE HANDLE PLAYER HAVING SAME SCORE AS ANOTHER*******
-		// add for loop to sum the score
-				
-		
 	}
 	
 	/**
@@ -881,4 +920,6 @@ public class GameEnvironment {
 	}
 
 }
+
+
 
