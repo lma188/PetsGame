@@ -303,7 +303,6 @@ public class Pet{
 		int currentMood = this.getMood();
 		float currentWeight = this.getWeight();
 		float changingWeight;
-		int currentToiletLevel = this.getToiletLevel();
 		
 		feedImprovement = (int) (foodToBeEaten.getNutritionalValue() * 0.7);
 		if(currentHungerLevel - feedImprovement <= 0){
@@ -327,11 +326,16 @@ public class Pet{
 		this.setWeight(currentWeight + changingWeight);
 		
 		
-		
+		int toiletIncrease;
 		if (feedImprovement > 50 ){
-			this.setToiletLevel((int) (currentToiletLevel + 1.5 * feedImprovement));
+			toiletIncrease = (int) (0.6 * feedImprovement);
 		}else{
-			this.setToiletLevel((int) (currentToiletLevel + 0.7 * feedImprovement));
+			toiletIncrease = (int) (0.3 * feedImprovement);
+		}
+		if(this.getToiletLevel() + toiletIncrease > 100){
+			this.setToiletLevel(100);
+		}else{
+			this.setToiletLevel(this.getToiletLevel() + toiletIncrease);
 		}
 	}
 		
@@ -367,7 +371,11 @@ public class Pet{
 		}else{
 			this.setPlayfulLevel(currentPlayLevel - playImprovement);
 		}
-		toyToBePlayed.setToyQuality(currentToyQuality - damageByPet);
+		if(toyToBePlayed.getToyQuality() - damageByPet < 0 || this.getIsMisbehaving()){
+			toyToBePlayed.setToyQuality(0);
+		}else{
+			toyToBePlayed.setToyQuality(currentToyQuality - damageByPet);
+		}
 		if(toyToBePlayed.getToyQuality() == 0){
 			toyToBePlayed.setIsBroken(true);
 		}
@@ -466,16 +474,16 @@ public class Pet{
 			return true;
 		}else{
 			int count = 0;
-			if(this.getHungerLevel() > 80){
+			if(this.getHungerLevel() > 90){
 				count += 1;
 			}
-			if(this.getTiredLevel() > 80){
+			if(this.getTiredLevel() > 90){
 				count += 1;
 			}
-			if(this.getToiletLevel() > 80){
+			if(this.getToiletLevel() > 90){
 				count += 1;
 			}
-			if(this.getMood() < 20){
+			if(this.getMood() < 10){
 				count += 1;
 			}
 			if(count >= 2){

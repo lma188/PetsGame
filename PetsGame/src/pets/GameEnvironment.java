@@ -309,6 +309,9 @@ public class GameEnvironment {
 				if(pSpecies == null){
 					again = true;
 				}
+			}else{
+				System.out.println("Error: please enter 1 or 2.");
+				again = true;
 			}
 		}while(again);
 		return pSpecies;
@@ -359,7 +362,7 @@ public class GameEnvironment {
 				input.nextLine();
 				System.out.println("Please either enter the store code of an item, or 0 to exit the store.");
 				again = true;
-				break;
+				continue;
 			}
 			if(tryInt == 0){
 				again = false;
@@ -410,64 +413,69 @@ public class GameEnvironment {
 		boolean broken = false;
 		int tryInt;
 		do{
-			p.printInventory();
-			if(p.inventoryEmpty() == false){
-				System.out.println("Select the item in your inventory you would like to use [counts as action] (foods will be eaten, toys will be played with) by entering the number beside the item, or exit inventory by entering 0");
-				try{
-					tryInt = input.nextInt();
-					input.nextLine();
-				}catch(InputMismatchException ime){
-					input.nextLine();
-					System.out.println("Please either enter the number beside the item you would like to use, or 0 to exit the inventory");
-					again = true;
-					break;
-				}
-				if(tryInt == 0){
-					again = false;
-					System.out.println("You have left your inventory");
-				}else if(tryInt > (foodAvailable.length + toysAvailable.length) || tryInt < 0){
-					System.out.println("Please enter a valid item code");
-				}else{
-					if(tryInt < foodAvailable.length + 1){
-						Food f = foodAvailable[tryInt - 1];
-						if(p.playersFood.get(f) == 0){
-							again = true;
-							System.out.println(String.format("There are 0 %s in your inventory, please choose a different food", f.getFoodName()));
-						}else{
-							p.removeFromInventory(f);
-							pet.feed(f);
-							System.out.println(String.format("%s, your pet %s has been fed %s. Updated stats:", p.getPlayerName(), pet.getPetName(), f.getFoodName()));
-							System.out.println(String.format("Hunger Level: %d", pet.getHungerLevel()));
-							System.out.println(String.format("Mood: %d", pet.getMood()));
-							System.out.println(String.format("Weight: %.2f", pet.getWeight()));
-							System.out.println(String.format("Toilet Need: %d", pet.getToiletLevel()));
-							System.out.println(String.format("Actions: %d", pet.getActions()));
-						}
+			if(pet.getActions() >= 2){
+				again = false;
+			}else{
+				p.printInventory();
+				if(p.inventoryEmpty() == false){
+					System.out.println("Select the item in your inventory you would like to use [counts as action] (foods will be eaten, toys will be played with) by entering the number beside the item, or exit inventory by entering 0");
+					try{
+						tryInt = input.nextInt();
+						input.nextLine();
+					}catch(InputMismatchException ime){
+						input.nextLine();
+						System.out.println("Please either enter the number beside the item you would like to use, or 0 to exit the inventory");
+						again = true;
+						continue;
+					}
+					if(tryInt == 0){
+						again = false;
+						System.out.println("You have left your inventory");
+					}else if(tryInt > (foodAvailable.length + toysAvailable.length) || tryInt < 0){
+						System.out.println("Please enter a valid item code");
 					}else{
-						Toy t = toysAvailable[tryInt - foodAvailable.length - 1];
-						if(p.playersToys.get(t) == 0){
-							again = true;
-							System.out.println(String.format("There are 0 %s in your inventory, please choose a different toy", t.getToyName()));
-						}else{
-							broken = pet.play(t);
-							if(broken){
-								p.removeFromInventory(t);
-								System.out.println(String.format("%s has broken, and has been removed from your inventory", t.getToyName()));
+						if(tryInt < foodAvailable.length + 1){
+							Food f = foodAvailable[tryInt - 1];
+							if(p.playersFood.get(f) == 0){
+								again = true;
+								System.out.println(String.format("There are 0 %s in your inventory, please choose a different food", f.getFoodName()));
 							}else{
-								System.out.println(String.format("The current quality of %s is %d/100", t.getToyName(), t.getToyQuality()));
+								p.removeFromInventory(f);
+								pet.feed(f);
+								System.out.println(String.format("%s, your pet %s has been fed %s. Updated stats:", p.getPlayerName(), pet.getPetName(), f.getFoodName()));
+								System.out.println(String.format("Hunger Level: %d", pet.getHungerLevel()));
+								System.out.println(String.format("Mood: %d", pet.getMood()));
+								System.out.println(String.format("Weight: %.2f", pet.getWeight()));
+								System.out.println(String.format("Toilet Need: %d", pet.getToiletLevel()));
+								System.out.println(String.format("Actions: %d", pet.getActions()));
 							}
-							System.out.println(String.format("%s, your pet %s has played with %s. Updated stats:", p.getPlayerName(), pet.getPetName(), t.getToyName()));
-							System.out.println(String.format("Mood: %d", pet.getMood()));
-							System.out.println(String.format("Playfulness: %d", pet.getPlayfulLevel()));
-							System.out.println(String.format("Hunger: %d", pet.getHungerLevel()));
-							System.out.println(String.format("Tiredness: %d", pet.getTiredLevel()));
-							
+						}else{
+							Toy t = toysAvailable[tryInt - foodAvailable.length - 1];
+							if(p.playersToys.get(t) == 0){
+								again = true;
+								System.out.println(String.format("There are 0 %s in your inventory, please choose a different toy", t.getToyName()));
+							}else{
+								broken = pet.play(t);
+								if(broken){
+									p.removeFromInventory(t);
+									System.out.println(String.format("%s has broken, and has been removed from your inventory", t.getToyName()));
+								}else{
+									System.out.println(String.format("The current quality of %s is %d/100", t.getToyName(), t.getToyQuality()));
+								}
+								System.out.println(String.format("%s, your pet %s has played with %s. Updated stats:", p.getPlayerName(), pet.getPetName(), t.getToyName()));
+								System.out.println(String.format("Mood: %d", pet.getMood()));
+								System.out.println(String.format("Playfulness: %d", pet.getPlayfulLevel()));
+								System.out.println(String.format("Hunger: %d", pet.getHungerLevel()));
+								System.out.println(String.format("Tiredness: %d", pet.getTiredLevel()));
+								System.out.println(String.format("Actions: %d", pet.getActions()));
+								
+							}
 						}
 					}
+				}else{
+					System.out.println(String.format("%s, you do not have any items in your inventory that you can use, so you are being redirected to the previous menu", p.getPlayerName()));
+					again = false;
 				}
-			}else{
-				System.out.println(String.format("%s, you do not have any items in your inventory that you can use, so you are being redirected to the previous menu", p.getPlayerName()));
-				again = false;
 			}
 		}while(again);
 	}
@@ -647,7 +655,7 @@ public class GameEnvironment {
 				input.nextLine();
 				System.out.println("Error: please enter either the number beside the pet you would like to use, or 0 to finish your day");
 				again = true;
-				break;
+				continue;
 			}
 			if(tryChoice == 0){
 				chosenPet = null;
@@ -672,7 +680,7 @@ public class GameEnvironment {
 			System.out.println("0. Go back to pet choice");
 			System.out.println("1. View Pet Stats");
 			System.out.println("2. Go to Store");
-			System.out.println("3. Go to your Inventory");
+			System.out.println("3. Go to your Inventory [actions available]");
 			System.out.println("4. Put your pet to sleep [action]");
 			System.out.println("5. Let your pet visit the bathroom [action]");
 			System.out.println("6. Skip the rest of this pet's actions for the day");
@@ -682,12 +690,12 @@ public class GameEnvironment {
 				input.nextLine();
 			}catch(InputMismatchException ime){
 				input.nextLine();
-				System.out.println("Error: please enter the number beside the option you would like to choose. Whole number between 0 and 6.");
+				System.out.println("Error: please enter the number beside the option you would like to choose. Whole number between 0 and 7.");
 				again = true;
-				break;
+				continue;
 			}
 			if(tryChoice < 0 || tryChoice > 7){
-				System.out.println("Error: please enter the number beside the option you would like to choose. Whole number between 0 and 6.");
+				System.out.println("Error: please enter the number beside the option you would like to choose. Whole number between 0 and 7.");
 				again = true;
 			}else{
 				choice = tryChoice;
