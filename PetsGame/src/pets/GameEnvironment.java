@@ -91,6 +91,14 @@ public class GameEnvironment {
 		PLAYER_LIST = this.setUpPlayers();
 	}
 	
+	public GameEnvironment(int numPlayers, int numDays){
+		NUM_PLAYERS = numPlayers;
+		NUM_DAYS = numDays;
+		PETS_LIST = new ArrayList<Pet>();
+		namesList = new ArrayList<String>();
+		PLAYER_LIST = new Player[this.getNumPlayers()];
+	}
+	
 	/**
 	 * The getter method for the property PLAYER_LIST.
 	 * @return Returns the list of players in the game.

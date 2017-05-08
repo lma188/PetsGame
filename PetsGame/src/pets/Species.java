@@ -46,7 +46,7 @@ public class Species {
 		HUNGER_CO = hungerCo;
 		TIRED_CO = tiredCo;
 		PLAY_CO = playCo;
-		TOILET_CO = tiredCo;
+		TOILET_CO = toiletCo;
 		ORIGINAL_WEIGHT = weight;
 	}
 	
