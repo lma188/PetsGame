@@ -1,32 +1,50 @@
 package pets2;
 
-public interface Food {
+public abstract class Food {
+
+	protected String name;
+	protected int nutrition;
+	protected int taste;
+	protected int price;
+	protected String className;
+	
 
 	/**
 	 * @return the className
 	 */
-	public String getClassName();
+	public String getClassName() {
+		return className;
+	}
 
 	/**
 	 * @return the name
 	 */
-	public String getName();
+	public String getName() {
+		return name;
+	}
 
 	/**
 	 * @return the nutrition
 	 */
-	public int getNutrition();
+	public int getNutrition() {
+		return nutrition;
+	}
 
 	/**
 	 * @return the taste
 	 */
-	public int getTaste();
+	public int getTaste() {
+		return taste;
+	}
 
 	/**
 	 * @return the price
 	 */
-	public int getPrice();
+	public int getPrice() {
+		return price;
+	}
 	
-	public void printStats();
-	
+	public void printStats(){
+		System.out.println(String.format(" %s. Nutrition: %d/100. Tastiness: %d/100. Price: %d coins.", this.getName(), this.getNutrition(), this.getTaste(), this.getPrice()));
+	}
 }

@@ -39,9 +39,19 @@ public class GameEnvironment {
 	public static Toy playHouse = new PlayHouse();
 
 	public static final Toy[] toysAvailable = {ball, twine, teddyBear, chewToy, bell, playHouse};
-	public static final String[] animalsAvailable = {"Dog", "Cat", "Bird", "Snake", "Lion", "Panda"};
+	
+	public static Animal dog = new Dog("ref");
+	public static Animal cat = new Cat("ref");
+	public static Animal bird = new Bird("ref");
+	public static Animal snake = new Snake("ref");
+	public static Animal lion = new Lion("ref");
+	public static Animal panda = new Panda("ref");
+	public static final Animal[] animalsAvailable = {dog, cat, bird, snake, lion, panda};
+	
 	
 	public GameEnvironment(){
+		System.out.println(GameEnvironment.snake.getSpeciesName());
+		
 		NUM_PLAYERS = this.askNumPlayers();
 		NUM_DAYS = this.askNumDays();
 		PETS_LIST = new ArrayList<Animal>();
@@ -116,7 +126,7 @@ public class GameEnvironment {
 	/**
 	 * @return the animalsAvailable
 	 */
-	public static String[] getAnimalsAvailable() {
+	public static Animal[] getAnimalsAvailable() {
 		return animalsAvailable;
 	}
 	
@@ -201,7 +211,7 @@ public class GameEnvironment {
 				again = false;
 			}else if(trySpecies.equals("1") || trySpecies.equals("2") || trySpecies.equals("3") || trySpecies.equals("4") || trySpecies.equals("5") || trySpecies.equals("6")){
 				again = false;
-				petSpecies = animalsAvailable[Integer.valueOf(trySpecies) - 1];
+				petSpecies = animalsAvailable[Integer.valueOf(trySpecies) - 1].getSpeciesName();
 			}else{
 				again = true;
 				System.out.println(errorMessage);
@@ -212,21 +222,20 @@ public class GameEnvironment {
 	
 	public void printSpeciesListNum(){
 		for(int i = 0; i < animalsAvailable.length; i++){
-			String speciesName = animalsAvailable[i];
+			String speciesName = animalsAvailable[i].getSpeciesName();
 			System.out.println(String.format("%d. %s", i + 1, speciesName));
 		}
 	}
 	
 	public void printSpeciesList(){
 		for(int i = 0; i < animalsAvailable.length; i++){
-			String speciesName = animalsAvailable[i];
+			String speciesName = animalsAvailable[i].getSpeciesName();
 			System.out.println(String.format("%s", speciesName));
 		}
 	}
 	
 	public void chooseViewSpeciesStats(){
 		boolean again = true;
-		int speciesNum;
 		do{
 			System.out.println("The species available to you are:");
 			this.printSpeciesListNum();
@@ -235,35 +244,13 @@ public class GameEnvironment {
 			trySpecies = trySpecies.trim();
 			if(trySpecies.equals("0")){
 				again = false;
-			}
-			try{
-				speciesNum = Integer.valueOf(trySpecies) - 1;
-			}catch(NumberFormatException nfe){
+			}else if(trySpecies.equals("1") || trySpecies.equals("2") || trySpecies.equals("3") || trySpecies.equals("4") || trySpecies.equals("5") || trySpecies.equals("6")){
+				again = false;
+				Animal pSpecies = animalsAvailable[Integer.valueOf(trySpecies) - 1];
+				pSpecies.printSpeciesStats();
+			}else{
 				again = true;
 				System.out.println("Please enter a valid species number between 1 and 6, or enter 0 to go back.");
-				continue;
-			}
-			switch(speciesNum){
-			case 0: again = false;
-					Dog.printSpeciesStats();
-					break;
-			case 1: again = false;
-					Cat.printSpeciesStats();
-					break;
-			case 2: again = false;
-					Bird.printSpeciesStats();
-					break;
-			case 3: again = false;
-					Snake.printSpeciesStats();
-					break;
-			case 4: again = false;
-					Lion.printSpeciesStats();
-					break;
-			case 5: again = false;
-					Panda.printSpeciesStats();
-					break;
-			default: again = true;
-					System.out.println("Please enter a valid species number between 1 and 6, or enter 0 to go back.");
 			}
 		}while(again);
 	}

@@ -1,52 +1,11 @@
 package pets2;
 
-public class Chocolate implements Food{
+public class Chocolate extends Food{
 
-	private String name = "Chocolate";
-	private int nutrition = 30;
-	private int taste = 95;
-	private int price = 30;
-	private String className = "Chocolate";
+	protected String name = "Chocolate";
+	protected int nutrition = 30;
+	protected int taste = 95;
+	protected int price = 30;
+	protected String className = "Chocolate";
 	
-	public Chocolate(){
-	}
-
-	/**
-	 * @return the className
-	 */
-	public String getClassName() {
-		return className;
-	}
-
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @return the nutrition
-	 */
-	public int getNutrition() {
-		return nutrition;
-	}
-
-	/**
-	 * @return the taste
-	 */
-	public int getTaste() {
-		return taste;
-	}
-
-	/**
-	 * @return the price
-	 */
-	public int getPrice() {
-		return price;
-	}
-	
-	public void printStats(){
-		System.out.println(String.format(" %s. Nutrition: %d/100. Tastiness: %d/100. Price: %d coins.", this.getName(), this.getNutrition(), this.getTaste(), this.getPrice()));
-	}
 }
