@@ -333,7 +333,7 @@ public class Dog implements Animal{
 		int toiletIncrease;
 		float changeInWeight;
 		
-		feedImprovement = (int) (Food.getNutrition() * 0.7);
+		feedImprovement = (int) (food.getNutrition() * 0.7);
 		if(this.getHungerLevel() - feedImprovement <= 0){
 			this.setHungerLevel(0);
 		}else{
@@ -349,8 +349,8 @@ public class Dog implements Animal{
 		}else{
 			this.setToiletLevel(this.getToiletLevel() + toiletIncrease);
 		}
-		moodImprovement = (int) (Food.getTaste() * 0.3);
-		if(Dog.getFavFood() == Food.getName()){
+		moodImprovement = (int) (food.getTaste() * 0.3);
+		if(Dog.getFavFood() == food.getName()){
 			moodImprovement = (int) (moodImprovement * 0.5);
 			this.setDailyScore(this.getDailyScore() + 50);
 		}
@@ -402,10 +402,10 @@ public class Dog implements Animal{
 		if(toy.getQuality() <= 0){
 			toy.setIsBroken(true);
 		}
-		if(this.getHungerLevel() + Toy.getExercise() >= 100){
+		if(this.getHungerLevel() + toy.getExercise() >= 100){
 			this.setHungerLevel(100);
 		}else{
-			this.setHungerLevel(this.getHungerLevel() + Toy.getExercise());
+			this.setHungerLevel(this.getHungerLevel() + toy.getExercise());
 		}
 		return toy.getIsBroken();
 	}

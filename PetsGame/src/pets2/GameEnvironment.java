@@ -22,8 +22,23 @@ public class GameEnvironment {
 	public static final Scanner input = new Scanner(System.in);
 	public static Random randomObject = new Random();
 	
-	public static final String[] foodAvailable = {"Pizza", "Chocolate", "Burger", "Spaghetti", "Burritos", "Kale"};
-	public static final String[] toysAvailable = {"Ball", "Twine", "Teddy Bear", "Chew Toy", "Bell", "Play House"};
+	public static Food pizza = new Pizza();
+	public static Food chocolate = new Chocolate();
+	public static Food burger = new Burger();
+	public static Food spaghetti = new Spaghetti();
+	public static Food burritos = new Burritos();
+	public static Food kale = new Kale();
+	
+	public static final Food[] foodAvailable = {pizza, chocolate, burger, spaghetti, burritos, kale};
+	
+	public static Toy ball = new Ball();
+	public static Toy twine = new Twine();
+	public static Toy teddyBear = new TeddyBear();
+	public static Toy chewToy = new ChewToy();
+	public static Toy bell = new Bell();
+	public static Toy playHouse = new PlayHouse();
+
+	public static final Toy[] toysAvailable = {ball, twine, teddyBear, chewToy, bell, playHouse};
 	public static final String[] animalsAvailable = {"Dog", "Cat", "Bird", "Snake", "Lion", "Panda"};
 	
 	public GameEnvironment(){
@@ -87,14 +102,14 @@ public class GameEnvironment {
 	/**
 	 * @return the foodAvailable
 	 */
-	public static String[] getFoodAvailable() {
+	public static Food[] getFoodAvailable() {
 		return foodAvailable;
 	}
 
 	/**
 	 * @return the toysAvailable
 	 */
-	public static String[] getToysAvailable() {
+	public static Toy[] getToysAvailable() {
 		return toysAvailable;
 	}
 
@@ -310,33 +325,19 @@ public class GameEnvironment {
 	public void printStore(){
 		System.out.println("The items available for you to purchase in the store are as follows:");
 		System.out.println("Foods");
-		String foodName;
-		String toyName;
+		Food food;
+		Toy toy;
 		int i = 0;
 		for(i = 0; i<foodAvailable.length; i++){
-			foodName = foodAvailable[i];
-			System.out.print(String.format("%d.", i+1));
-			switch(foodName){
-			case "Pizza": Pizza.printStats(); break;
-			case "Chocolate": Chocolate.printStats(); break;
-			case "Burger": Burger.printStats(); break;
-			case "Spaghetti": Spaghetti.printStats(); break;
-			case "Burritos": Burritos.printStats(); break;
-			case "Kale": Kale.printStats(); break;
-			}
+			food = foodAvailable[i];
+			System.out.print(String.format("%d.", i + 1));
+			food.printStats();
 		}
 		System.out.println("Toys:");
 		for(int n = 0; n<toysAvailable.length; n++){
 			System.out.print(String.format("%d.", (i+ n + 1)));
-			toyName = toysAvailable[n];
-			switch(toyName){
-			case "Ball": Ball.printStats(); break;
-			case "Twine": Twine.printStats(); break;
-			case "Teddy Bear": TeddyBear.printStats(); break;
-			case "Chew Toy": ChewToy.printStats(); break;
-			case "Bell": Bell.printStats(); break;
-			case "Play House": PlayHouse.printStats(); break;
-			}
+			toy = toysAvailable[n];
+			toy.printStats();
 		}
 	}
 	
@@ -362,16 +363,17 @@ public class GameEnvironment {
 				System.out.println("Please enter a valid store code");
 			}else{
 				if(tryInt < foodAvailable.length + 1){
-					String foodName = foodAvailable[tryInt - 1];
-					int foodPrice = 0;
+					Food food = foodAvailable[tryInt - 1];
+					String foodName = food.getName();
+					int foodPrice = food.getPrice();
 					Food f = null;
 					switch(foodName){
-					case "Pizza": foodPrice = Pizza.getPrice(); f = new Pizza(); break;
-					case "Chocolate": foodPrice = Chocolate.getPrice(); f = new Chocolate(); break;
-					case "Burger": foodPrice = Burger.getPrice(); f = new Burger(); break;
-					case "Spaghetti": foodPrice = Spaghetti.getPrice(); f = new Spaghetti(); break;
-					case "Burritos": foodPrice = Burritos.getPrice(); f = new Burritos(); break;
-					case "Kale": foodPrice = Kale.getPrice(); f = new Kale(); break;
+					case "Pizza": f = new Pizza(); break;
+					case "Chocolate": f = new Chocolate(); break;
+					case "Burger": f = new Burger(); break;
+					case "Spaghetti": f = new Spaghetti(); break;
+					case "Burritos": f = new Burritos(); break;
+					case "Kale": f = new Kale(); break;
 					}
 					if(player.getBalance() - foodPrice < 0){
 						System.out.println("You do not have sufficient funds to make this purchase.");
@@ -380,22 +382,23 @@ public class GameEnvironment {
 						f = null;
 					}else{
 						System.out.println(String.format("%s, you have purchased %s", player.getName(), foodName));
-						player.purchaseFood(f);
+						player.purchaseFood(f, foodName, foodPrice);
 						player.printSummaryInventory();
 						player.printBalance();
 					}
 					this.printStore();
 				}else{
-					String toyName = toysAvailable[tryInt - foodAvailable.length - 1];
-					int toyPrice = 0;
+					Toy toy = toysAvailable[tryInt - foodAvailable.length - 1];
+					int toyPrice = toy.getPrice();
+					String toyName = toy.getName();
 					Toy t = null;
 					switch(toyName){
-					case "Ball": Ball.getPrice(); t = new Ball(); break;
-					case "Twine": Twine.getPrice(); t = new Twine(); break;
-					case "Teddy Bear": TeddyBear.getPrice(); t = new TeddyBear(); break;
-					case "Chew Toy": ChewToy.getPrice(); t = new ChewToy(); break;
-					case "Bell": Bell.getPrice(); t = new Bell(); break;
-					case "Play House": PlayHouse.getPrice(); t = new PlayHouse(); break;
+					case "Ball": t = new Ball(); break;
+					case "Twine": t = new Twine(); break;
+					case "Teddy Bear": t = new TeddyBear(); break;
+					case "Chew Toy": t = new ChewToy(); break;
+					case "Bell": t = new Bell(); break;
+					case "Play House": t = new PlayHouse(); break;
 					}
 					if(player.getBalance() - toyPrice < 0){
 						System.out.println("You do not have sufficient funds to make this purchase.");
@@ -404,7 +407,7 @@ public class GameEnvironment {
 						t = null;
 					}else{
 						System.out.println(String.format("%s, you have purchased %s", player.getName(), toyName));
-						player.purchaseToy(t);
+						player.purchaseToy(t, toyName, toyPrice);
 						player.printSummaryInventory();
 						player.printBalance();
 					}
@@ -448,7 +451,8 @@ public class GameEnvironment {
 						System.out.println("Please enter a valid item code");
 					}else{
 						if(tryInt < foodAvailable.length + 1){
-							String foodName = foodAvailable[tryInt - 1];
+							Food food = foodAvailable[tryInt - 1];
+							String foodName = food.getName();
 							if(player.playersFood.get(foodName).size() == 0){
 								again = true;
 								System.out.println(String.format("There are 0 %s in your inventory, please choose a different food", foodName));
@@ -462,7 +466,8 @@ public class GameEnvironment {
 								System.out.println(String.format("Actions: %d", pet.getActions()));
 							}
 						}else{
-							String toyName = toysAvailable[tryInt - foodAvailable.length - 1];
+							Toy toy = toysAvailable[tryInt - foodAvailable.length - 1];
+							String toyName = toy.getName();
 							if(player.playersToys.get(toyName).size() == 0){
 								again = true;
 								System.out.println(String.format("There are 0 %s in your inventory, please choose a different toy", toyName));

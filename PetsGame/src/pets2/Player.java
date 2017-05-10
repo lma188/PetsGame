@@ -24,11 +24,13 @@ public class Player {
 		PLAYERS_PETS = new Animal[NUM_PETS];
 		playersToys = new HashMap<String, ArrayList<Toy>>();
 		playersFood = new HashMap<String, ArrayList<Food>>();
-		for(String toyName : GameEnvironment.toysAvailable){
+		for(Toy toy : GameEnvironment.toysAvailable){
+			String toyName = toy.getName();
 			ArrayList<Toy> empty = new ArrayList<Toy>();
 			playersToys.put(toyName, empty);
 		}
-		for(String foodName : GameEnvironment.foodAvailable){
+		for(Food food : GameEnvironment.foodAvailable){
+			String foodName = food.getName();
 			ArrayList<Food> empty = new ArrayList<Food>();
 			playersFood.put(foodName, empty);
 		}
@@ -84,18 +86,18 @@ public class Player {
 		return PLAYERS_PETS;
 	}
 	
-	public void purchaseFood(Food food){
-		ArrayList<Food> foodList = playersFood.get(Food.getName());
+	public void purchaseFood(Food food, String foodName, int foodPrice){
+		ArrayList<Food> foodList = playersFood.get(foodName);
 		foodList.add(food);
-		this.playersFood.put(Food.getName(), foodList);
-		this.setBalance(this.getBalance() - Food.getPrice());
+		this.playersFood.put(foodName, foodList);
+		this.setBalance(this.getBalance() - foodPrice);
 	}
 	
-	public void purchaseToy(Toy toy){
-		ArrayList<Toy> toyList = playersToys.get(Toy.getName());
+	public void purchaseToy(Toy toy, String toyName, int toyPrice){
+		ArrayList<Toy> toyList = playersToys.get(toyName);
 		toyList.add(toy);
-		this.playersToys.put(Toy.getName(), toyList);
-		this.setBalance(this.getBalance() - Toy.getPrice());
+		this.playersToys.put(toyName, toyList);
+		this.setBalance(this.getBalance() - toyPrice);
 	}
 	
 	public void printBalance(){
@@ -107,11 +109,13 @@ public class Player {
 		System.out.println("Foods:");
 		int foodCount;
 		int toyCount;
-		for(String foodName : GameEnvironment.foodAvailable){
+		for(Food food : GameEnvironment.foodAvailable){
+			String foodName = food.getName();
 			foodCount = playersFood.get(foodName).size();
 			System.out.println(String.format("%s x%d", foodName, foodCount));
 		}
-		for(String toyName : GameEnvironment.toysAvailable){
+		for(Toy toy : GameEnvironment.toysAvailable){
+			String toyName = toy.getName();
 			toyCount = playersToys.get(toyName).size();
 			System.out.println(String.format("%s x%d", toyName, toyCount));
 		}
@@ -126,13 +130,13 @@ public class Player {
 		String foodName;
 		String toyName;
 		for(i = 0; i<GameEnvironment.foodAvailable.length; i++){
-			foodName = GameEnvironment.foodAvailable[i];
+			foodName = GameEnvironment.foodAvailable[i].getName();
 			foodCount = playersFood.get(foodName).size();
 			System.out.println(String.format("%d. %s x%d", i+1, foodName, foodCount));
 		}
 		System.out.println("Toys");
-		for(int c = 0; c<GameEnvironment.toysAvailable.length; i++){
-			toyName = GameEnvironment.toysAvailable[c];
+		for(int c = 0; c<GameEnvironment.toysAvailable.length; c++){
+			toyName = GameEnvironment.toysAvailable[c].getName();
 			toyCount = playersToys.get(toyName).size();
 			System.out.println(String.format("%d. %s x%d", (i+c+1), toyName, toyCount));
 		}
@@ -145,7 +149,7 @@ public class Player {
 		String foodName;
 		String toyName;
 		for(int i=0; i<GameEnvironment.foodAvailable.length; i++){
-			foodName = GameEnvironment.foodAvailable[i];
+			foodName = GameEnvironment.foodAvailable[i].getName();
 			itemCount = playersFood.get(foodName).size();
 			if(itemCount != 0){
 				empty = false;
@@ -155,7 +159,7 @@ public class Player {
 			return empty;
 		}
 		for(int i=0; i<GameEnvironment.toysAvailable.length; i++){
-			toyName = GameEnvironment.toysAvailable[i];
+			toyName = GameEnvironment.toysAvailable[i].getName();
 			itemCount = playersToys.get(toyName).size();
 			if(itemCount != 0){
 				empty = false;
