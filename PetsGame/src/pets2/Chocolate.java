@@ -1,11 +1,13 @@
 package pets2;
 
 public class Chocolate extends Food{
-
-	protected String name = "Chocolate";
-	protected int nutrition = 30;
-	protected int taste = 95;
-	protected int price = 30;
-	protected String className = "Chocolate";
+	
+	public Chocolate(){
+		this.name = "Chocolate";
+		this.nutrition = 30;
+		this.taste = 95;
+		this.price = 30;
+		this.className = "Chocolate";
+	}
 	
 }

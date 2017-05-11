@@ -14,5 +14,6 @@ public class Snake extends Animal{
 		this.toiletCo = 5;
 		this.originalWeight = (float) 2;
 		this.className = "Snake";
+		this.weight = originalWeight;
 	}
 }

@@ -14,5 +14,6 @@ public class Bird extends Animal{
 		this.toiletCo = 50;
 		this.originalWeight = (float) 1;
 		this.className = "Bird";
+		this.weight = originalWeight;
 	}
 }

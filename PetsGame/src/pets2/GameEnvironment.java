@@ -50,8 +50,6 @@ public class GameEnvironment {
 	
 	
 	public GameEnvironment(){
-		System.out.println(GameEnvironment.snake.getSpeciesName());
-		
 		NUM_PLAYERS = this.askNumPlayers();
 		NUM_DAYS = this.askNumDays();
 		PETS_LIST = new ArrayList<Animal>();

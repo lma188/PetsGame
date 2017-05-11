@@ -15,6 +15,7 @@ public class Panda extends Animal{
 		this.toiletCo = 20;
 		this.originalWeight = (float) 70;
 		this.className = "Panda";
+		this.weight = originalWeight;
 	}
 }
 

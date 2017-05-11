@@ -20,7 +20,7 @@ public class Player {
 	public Player(String playerName, int amountPets, GameEnvironment game){
 		NAME = playerName;
 		NUM_PETS = amountPets;
-		balance = 70 * NUM_PETS * game.getNumDays();
+		balance = 80 * NUM_PETS * game.getNumDays();
 		PLAYERS_PETS = new Animal[NUM_PETS];
 		playersToys = new HashMap<String, ArrayList<Toy>>();
 		playersFood = new HashMap<String, ArrayList<Food>>();

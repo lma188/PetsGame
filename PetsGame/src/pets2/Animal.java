@@ -36,7 +36,6 @@ public abstract class Animal {
 		toiletLevel = 0;
 		mood = 50;
 		isAlive = true;
-		weight = originalWeight;;
 		isMisbehaving = false;
 		isSick = false;
 		actions = 0;
